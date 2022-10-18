@@ -2,8 +2,7 @@ import os
 from datetime import datetime
 import numpy as np
 
-#List_of_csv
-#array
+
 def savedata(testtype,data,rating):
     print("saving data")
     today= datetime.today()
