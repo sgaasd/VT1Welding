@@ -8,11 +8,12 @@ def savedata(testtype,data,rating):
     print("saving data")
     today= datetime.today()
     testname=str(today.year)+str(today.month)+str(today.day)
-
-    number=len(os.listdir('Data\weld'))
+    curdir = os.getcwd()
+    number=len(os.listdir(curdir+"\Data\weld"))+1
+    number=f"{number:03d}"
     testname=str(testname)+"_"+str(rating)+"_"+str(testtype)+"_"+str(number)+".csv"
     print(testname)
-    np.savetxt("Data/"+str(testtype)+testname,data,delimiter=",")
+    np.savetxt("Data/"+str(testtype)+"/"+testname,data,delimiter=",")
 
 weld="weld"
 datatest=np.zeros(5)
