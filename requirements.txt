@@ -1,3 +1,6 @@
 dash
 jupyter-dash
 pandas
+scipy
+numpy
+robodk
