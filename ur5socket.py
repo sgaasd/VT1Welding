@@ -16,6 +16,10 @@ def savedata(testtype,data,rating):
     print(testname)
     np.savetxt("Data/"+str(testtype)+"/"+testname,data,delimiter=",")
 
+#MetafileIndhold(Typetest=T-joint, Størrelse=10mm, Dato=Day/month, Nummer=1, Link til dataen)
+#DataNavn(Dato=Day/Month, Nummer=1)
+#DataIndhold(time, Current, Voltage, WireFeeder, Velosity, Sound)
+
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('', 50000))
