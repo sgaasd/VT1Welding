@@ -3,4 +3,4 @@ jupyter-dash
 pandas
 scipy
 numpy
-robodk
+socket
