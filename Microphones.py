@@ -16,7 +16,7 @@ def CallMic(seconds,fs):
     write('output.wav', fs, myrecording)  # Save as WAV file 
     return myrecording
 
-#array=CallMic(10,16000)
+array=CallMic(10,16000)
 
 def stoprec(array):
     sd.stop()
