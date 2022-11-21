@@ -42,10 +42,7 @@ def stoprec(array):
 
 
     np.savetxt("cut.csv", cutarray, delimiter=",")
-
-
-
-
+    return cutarray
 
 
 
