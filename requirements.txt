@@ -3,3 +3,5 @@ pandas
 scipy
 numpy
 socket
+os
+datetime
