@@ -47,6 +47,7 @@ while close == False:
         datalist.append(data)
         if conn.recv(16) == "weldment_Done":
             weldment = "Done"
+            readyToWeld = False
 
     if weldment == "Done": #Gemmer data
         savedata(testtype="weld", data=datalist, rating=1)
