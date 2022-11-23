@@ -3,6 +3,11 @@ import os
 from datetime import datetime
 import pandas as pd
 
+'''
+Style guide comes from: 
+https://google.github.io/styleguide/pyguide.html#3164-guidelines-derived-from-guidos-recommendations
+'''
+
 def save_data(test_type,data,rating):
     print("saving data")
     today= datetime.today()
@@ -20,7 +25,8 @@ def save_data(test_type,data,rating):
 
 def data_exchange_with_cowelder():
     ur10_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    ur10_socket.bind(('', 50000))
+    PORT = 50000
+    ur10_socket.bind(('', PORT))
     ur10_socket.listen(1)
     connection, address = ur10_socket.accept()
     print(connection)
