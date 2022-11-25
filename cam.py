@@ -27,7 +27,7 @@ while close== False:
         break
 
     ###### this should be called when we want to save data
-    out.write(frame)
+    out.write(frame)## writes images to the file
     
     if  close_counter>1000:
         break
@@ -35,7 +35,7 @@ while close== False:
 
     close_counter=close_counter+1
 # Release everything if job is finished
-Microphones.stoprec(array)
+Microphones.stoprec(array)###STOP AUDIO RECORDING
 cap.release()
 out.release()
 cv.destroyAllWindows()
