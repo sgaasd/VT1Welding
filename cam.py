@@ -26,8 +26,6 @@ while close== False:
         print("Can't receive frame")
         break
 
-
-    # write the flipped frame
     ###### this should be called when we want to save data
     out.write(frame)
     
