@@ -10,7 +10,7 @@ cap = cv.VideoCapture(1) ###should be 1 with an external webcam
 fourcc = cv.VideoWriter_fourcc(*"mp4v")
 #fourcc = cv.VideoWriter_fourcc(*"h264")
 out = cv.VideoWriter('output.mp4', fourcc, 20.0, (640,  480)) #('name', encoder, framerate, (resolution)) This should be adjusted to fit the camera
-array=Microphones.CallMic(20,16000) #If microphones doesn't work check 9 in microphones to specify which device it uses. To get an overveiw of the devices look at the printed list
+array=Microphones.CallMic(20,16000) #If microphones doesn't work check 9 in microphones to specify which device it uses. To get an overveiw of the devices look at the printed list ###THIS STARTS THE MICROPHONE RECORDING
 
 ##this is just for the counter 
 close= False
