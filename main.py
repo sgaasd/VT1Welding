@@ -118,7 +118,7 @@ def data_exchange_with_cowelder():
             out.release()
 
             save_data(test_type="weld", data=welding_data_dataframe, rating=1)
-            save_data(test_type="mic", data=mic_df, rating=1)
+            save_data(test_type="sound", data=mic_df, rating=1)
             weldment_done = False
 
         if input("Continue to weld another piece press 'y' | shutdown press 'n': ") == "y":
