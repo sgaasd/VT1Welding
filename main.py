@@ -95,6 +95,7 @@ def data_exchange_with_cowelder():
             new_header = welding_data_dataframe.iloc[0] #grab the first row for the headery
             welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
             welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
+            Hz=10
             lst=list_range(0,len(welding_data_dataframe.index),1/Hz)
             welding_data_dataframe['time [s]']=lst
 
