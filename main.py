@@ -40,7 +40,7 @@ def data_exchange_with_cowelder():
 
     cap = cv.VideoCapture(1)
     fourcc = cv.VideoWriter_fourcc(*"mp4v")
-    out = cv.VideoWriter('output.mp4', fourcc, 20.0, (640,  480))
+    out = cv.VideoWriter('output.mp4', fourcc, 20.0, (1920, 1080))
 
     while close_socket == False:
 
@@ -65,6 +65,9 @@ def data_exchange_with_cowelder():
             
             while weldment_done == False: 
                 recieved_data = connection.recv(1024)
+                ret, frame = cap.read()
+                cv.waitKey(1)
+                cv.imshow('frame', frame)
                 out.write(frame) #Start saving the frames to the video
                 if recieved_data.decode("utf-8") == 4:
                 #if recieved_data == int.to_bytes(4,4,'big'):
@@ -82,8 +85,7 @@ def data_exchange_with_cowelder():
             welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
             #print(welding_data_dataframe)
             Microphones.stoprec(Micdata)
-            out.write(frame)## writes images to the file
-
+            out.release()
 
             save_data(test_type="weld", data=welding_data_dataframe, rating=1)
             weldment_done = False
@@ -92,11 +94,11 @@ def data_exchange_with_cowelder():
             close_socket = True
             connection.send((bytes('(5)', 'ascii')))
             connection.close()
+            cap.release()
+            cv.destroyAllWindows()
         else:
             pass
-    cap.release()
-    out.release()
-    cv.destroyAllWindows()
+
 
 def main():
     data_exchange_with_cowelder()
