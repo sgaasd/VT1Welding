@@ -13,7 +13,7 @@ def CallMic(seconds,fs):
     sd.default.device=14,4
     myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=6)
     sd.wait()  # Wait until recording is finished
-    write('output.wav', fs, myrecording)  # Save as WAV file 
+    #write('output.wav', fs, myrecording)  # Save as WAV file 
     return myrecording
 
 array=CallMic(10,16000)
