@@ -4,6 +4,7 @@ from datetime import datetime
 import pandas as pd
 import cv2 as cv
 import Microphones
+import time
 
 '''
 Style guide comes from: 
@@ -74,7 +75,9 @@ def data_exchange_with_cowelder():
             initiate_go_signal = "NULL"
             Micdata=Microphones.CallMic(20,16000)
             connection.send((bytes('(2)', 'ascii')))
-            
+            unix_time=datetime.now()
+            unix_time=time.mktime(unix_time.timetuple())
+
             while weldment_done == False: 
                 recieved_data = connection.recv(1024)
                 ret, frame = cap.read()
@@ -96,7 +99,7 @@ def data_exchange_with_cowelder():
             welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
             welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
             Hz=10
-            lst=list_range(0,len(welding_data_dataframe.index),1/Hz)
+            lst=list_range(unix_time,len(welding_data_dataframe.index),1/Hz)
             welding_data_dataframe['time [s]']=lst
 
             cols =  welding_data_dataframe.columns.tolist()
@@ -107,7 +110,7 @@ def data_exchange_with_cowelder():
             Micdata=Microphones.stoprec(Micdata)
             mic_df=pd.DataFrame(Micdata,columns=['Channel_1','Channel_2','Channel_3','Channel_4'])
             Hz=16000
-            lst=list_range(0,len(mic_df.index),1/Hz)
+            lst=list_range(unix_time,len(mic_df.index),1/Hz)
             mic_df['time [s]']=lst
             cols =  mic_df.columns.tolist()
             cols = cols[-1:] + cols[:-1]
