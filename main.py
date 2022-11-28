@@ -2,6 +2,8 @@ import socket
 import os
 from datetime import datetime
 import pandas as pd
+import cv2 as cv
+import Microphones
 
 '''
 Style guide comes from: 
@@ -35,12 +37,23 @@ def data_exchange_with_cowelder():
     close_socket = False
     initiate_weld_signal = "NULL"
     weldment_done = False
+
+    cap = cv.VideoCapture(1)
+    fourcc = cv.VideoWriter_fourcc(*"mp4v")
+    out = cv.VideoWriter('output.mp4', fourcc, 20.0, (640,  480))
+
     while close_socket == False:
+
+        ret, frame = cap.read()
+        cv.waitKey(1)
+        cv.imshow('frame', frame)
+
         initiate_go_signal = input("Type 'start' to initiate program: ")
         welding_data_list = ["Current, Voltage, Wire-feed"]
         if initiate_go_signal == "start": #Start til før svejsning
             while initiate_weld_signal == "NULL":
                 connection.send((bytes('(1)', 'ascii'))) #Sender signal til roboten om den skal starte
+                out.write(frame)# gemmer billeder
                 recieved_data = connection.recv(1024) # forventer at modtaget et signal om at den er kørt til svejseposition
                 if recieved_data.decode("utf-8") == 3:
                 #if recieved_data == int.to_bytes(3,4,'big'):
@@ -51,6 +64,7 @@ def data_exchange_with_cowelder():
             connection.send((bytes('(2)', 'ascii')))
             while weldment_done == False: 
                 recieved_data = connection.recv(1024)
+                array=Microphones.CallMic(20,16000)
                 if recieved_data.decode("utf-8") == 4:
                 #if recieved_data == int.to_bytes(4,4,'big'):
                     weldment_done = True  
