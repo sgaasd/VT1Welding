@@ -40,7 +40,12 @@ def data_exchange_with_cowelder():
 
     cap = cv.VideoCapture(1)
     fourcc = cv.VideoWriter_fourcc(*"mp4v")
-    out = cv.VideoWriter('output.mp4', fourcc, 20.0, (1920, 1080))
+    today= datetime.today()
+    cur_dir = os.getcwd()
+    number=len(os.listdir(cur_dir+"/Data/cam"))+1
+    test_name=str(today.year)+str(today.month)+str(today.day)
+    test_name=str(test_name)+"_cam_"+str(number)+'.mp4'
+    out = cv.VideoWriter('Data/cam/'+test_name, fourcc, 20.0, (1920, 1080))
 
     while close_socket == False:
 
