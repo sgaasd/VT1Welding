@@ -84,7 +84,7 @@ def data_exchange_with_cowelder():
             welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
             welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
             #print(welding_data_dataframe)
-            Microphones.stoprec(Micdata)
+            Micdata=Microphones.stoprec(Micdata)
             out.release()
 
             save_data(test_type="weld", data=welding_data_dataframe, rating=1)
