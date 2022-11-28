@@ -22,7 +22,7 @@ def stoprec(array):
     sd.stop()
     print(array)
 
-    np.savetxt("raw.csv", array, delimiter=",")
+    #np.savetxt("raw.csv", array, delimiter=",")
 
     print(len(array[0,:]))
     datastop=0
@@ -41,7 +41,7 @@ def stoprec(array):
     cutarray=array[0:len(array[:,0])-datastop,:]
 
 
-    np.savetxt("cut.csv", cutarray, delimiter=",")
+    #np.savetxt("cut.csv", cutarray, delimiter=",")
     return cutarray
 
 
