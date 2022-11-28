@@ -24,8 +24,9 @@ def save_data(test_type,data,rating):
 #DataIndhold(time, Current, Voltage, WireFeeder, Velosity, Sound)
 
 def data_exchange_with_cowelder():
-    ur10_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     PORT = 50000
+    SAMPLERATE = 10
+    ur10_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ur10_socket.bind(('', PORT))
     ur10_socket.listen(1)
     connection, address = ur10_socket.accept()
