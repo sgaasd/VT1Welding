@@ -98,15 +98,23 @@ def data_exchange_with_cowelder():
             lst=list_range(0,len(welding_data_dataframe.index),1/Hz)
             welding_data_dataframe['time [s]']=lst
 
+            cols =  welding_data_dataframe.columns.tolist()
+            cols = cols[-1:] + cols[:-1]
+            welding_data_dataframe = welding_data_dataframe[cols]
+
             #print(welding_data_dataframe)
             Micdata=Microphones.stoprec(Micdata)
             mic_df=pd.DataFrame(Micdata,columns=['Channel_1','Channel_2','Channel_3','Channel_4'])
             Hz=16000
             lst=list_range(0,len(mic_df.index),1/Hz)
             mic_df['time [s]']=lst
+            cols =  mic_df.columns.tolist()
+            cols = cols[-1:] + cols[:-1]
+            mic_df = mic_df[cols]
             out.release()
 
             save_data(test_type="weld", data=welding_data_dataframe, rating=1)
+            save_data(test_type="mic", data=mic_df, rating=1)
             weldment_done = False
 
         if input("Continue to weld another piece press 'y' | shutdown press 'n': ") == "y":
