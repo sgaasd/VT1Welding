@@ -1,0 +1,21 @@
+ Program
+   Robot Program
+     MigaWeld
+       MoveJ
+         Home_position
+       Wait Start_button=HI
+       'Wait Start_button=HI'
+       SpeedSlider
+       'WeldParameters'
+       'Halt'
+       WeldItem_1
+         Weld seam
+           Airpoint
+           Startpoint
+           Arc on
+           Paths:
+             Linear_1 /\/\
+           Arc off
+           Airpoint
+       MoveJ
+         Home_position
