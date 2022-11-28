@@ -53,7 +53,6 @@ def data_exchange_with_cowelder():
         if initiate_go_signal == "start": #Start til før svejsning
             while initiate_weld_signal == "NULL":
                 connection.send((bytes('(1)', 'ascii'))) #Sender signal til roboten om den skal starte
-                out.write(frame)# gemmer billeder
                 recieved_data = connection.recv(1024) # forventer at modtaget et signal om at den er kørt til svejseposition
                 if recieved_data.decode("utf-8") == 3:
                 #if recieved_data == int.to_bytes(3,4,'big'):
@@ -61,10 +60,12 @@ def data_exchange_with_cowelder():
                     initiate_weld_signal = input("Type 'weld' to start welding: ")
         if initiate_weld_signal == "weld" and welding_tip_in_position == True: #Start svejsning og begynder data indsamling
             initiate_go_signal = "NULL"
+            Micdata=Microphones.CallMic(20,16000)
             connection.send((bytes('(2)', 'ascii')))
+            
             while weldment_done == False: 
                 recieved_data = connection.recv(1024)
-                array=Microphones.CallMic(20,16000)
+                out.write(frame) #Start saving the frames to the video
                 if recieved_data.decode("utf-8") == 4:
                 #if recieved_data == int.to_bytes(4,4,'big'):
                     weldment_done = True  
@@ -80,6 +81,10 @@ def data_exchange_with_cowelder():
             welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
             welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
             #print(welding_data_dataframe)
+            Microphones.stoprec(Micdata)
+            out.write(frame)## writes images to the file
+
+
             save_data(test_type="weld", data=welding_data_dataframe, rating=1)
             weldment_done = False
 
@@ -89,6 +94,9 @@ def data_exchange_with_cowelder():
             connection.close()
         else:
             pass
+    cap.release()
+    out.release()
+    cv.destroyAllWindows()
 
 def main():
     data_exchange_with_cowelder()
