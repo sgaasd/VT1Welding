@@ -21,6 +21,13 @@ def save_data(test_type,data,rating):
     print(test_name)
     data.to_csv("Data/"+str(test_type)+"/"+test_name,index=False)
 
+def list_range(start, end, step):
+    lst=[start]
+    for i in range(1,end):
+        start=start+step
+        lst.append(start)
+    return lst
+
 #MetafileIndhold(Typetest=T-joint, Størrelse=10mm, Dato=Day/month, Nummer=1, Link til dataen)
 #DataNavn(Dato=Day/Month, Nummer=1)
 #DataIndhold(time, Current, Voltage, WireFeeder, Velosity, Sound)
@@ -88,8 +95,15 @@ def data_exchange_with_cowelder():
             new_header = welding_data_dataframe.iloc[0] #grab the first row for the headery
             welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
             welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
+            lst=list_range(0,len(welding_data_dataframe.index),1/Hz)
+            welding_data_dataframe['time [s]']=lst
+
             #print(welding_data_dataframe)
             Micdata=Microphones.stoprec(Micdata)
+            mic_df=pd.DataFrame(Micdata,columns=['Channel_1','Channel_2','Channel_3','Channel_4'])
+            Hz=16000
+            lst=list_range(0,len(mic_df.index),1/Hz)
+            mic_df['time [s]']=lst
             out.release()
 
             save_data(test_type="weld", data=welding_data_dataframe, rating=1)
