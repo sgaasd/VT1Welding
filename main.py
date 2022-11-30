@@ -46,21 +46,25 @@ def data_exchange_with_cowelder():
     close_socket = False
     initiate_weld_signal = "NULL"
     weldment_done = False
+    initiate = True
 
-#    cap = cv.VideoCapture(0)
-#    fourcc = cv.VideoWriter_fourcc(*"mp4v")
-    today= datetime.today()
-    cur_dir = os.getcwd()
-    number=len(os.listdir(cur_dir+"/Data/cam"))+1
-    test_name=str(today.year)+str(today.month)+str(today.day)
-    test_name=str(test_name)+"_cam_"+str(number)+'.mp4'
-    #ret = cap.set(cv.CAP_PROP_FRAME_WIDTH,1920)
-    #ret = cap.set(cv.CAP_PROP_FRAME_HEIGHT,1080)
-#    out = cv.VideoWriter('Data/cam/'+test_name, fourcc, 30.0, (640, 480))
+    
+    
 
     while close_socket == False:
-
-#        ret, frame = cap.read()
+        if initiate == True:
+            cap = cv.VideoCapture(1)
+            fourcc = cv.VideoWriter_fourcc(*"mp4v")
+            today= datetime.today()
+            cur_dir = os.getcwd()
+            number=len(os.listdir(cur_dir+"/Data/cam"))+1
+            test_name=str(today.year)+str(today.month)+str(today.day)
+            test_name=str(test_name)+"_cam_"+str(number)+'.mp4'
+            ret = cap.set(cv.CAP_PROP_FRAME_WIDTH,1920)
+            ret = cap.set(cv.CAP_PROP_FRAME_HEIGHT,1080)
+            out = cv.VideoWriter('Data/cam/'+test_name, fourcc, 20.0, (1920, 1080))
+            initiate = False
+            #ret, frame = cap.read()
 #        cv.waitKey(1)
 #        cv.imshow('frame', frame)
 
@@ -86,12 +90,13 @@ def data_exchange_with_cowelder():
                 connection.send((bytes('(2)', 'ascii')))
                 recieved_data = connection.recv(1024)
                 print(recieved_data)
-#                ret, frame = cap.read()
+                ret, frame = cap.read()
 #                cv.waitKey(1)
 #                cv.imshow('frame', frame)
-#                out.write(frame) #Start saving the frames to the video
+                out.write(frame) #Start saving the frames to the video
                 #if recieved_data.decode("utf-8") == 4:
                 if recieved_data == int.to_bytes(4,4,'big'):
+                    connection.send((bytes('(0)', 'ascii')))
                     weldment_done = True  
                 else:
                     #welding_data_list.append(recieved_data.decode("utf-8"))
@@ -123,7 +128,7 @@ def data_exchange_with_cowelder():
             cols =  mic_df.columns.tolist()
             cols = cols[-1:] + cols[:-1]
             mic_df = mic_df[cols]
-#            out.release()
+            out.release()
 
             save_data(test_type="weld", data=welding_data_dataframe, rating=1)
             save_data(test_type="sound", data=mic_df, rating=1)
@@ -133,10 +138,11 @@ def data_exchange_with_cowelder():
             close_socket = True
             connection.send((bytes('(5)', 'ascii')))
             connection.close()
-#            cap.release()
-#            cv.destroyAllWindows()
+            cap.release()
+            cv.destroyAllWindows()
         else:
-            pass
+            initiate = True
+            cap.release()
 
 
 def main():

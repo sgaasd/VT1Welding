@@ -5,15 +5,15 @@ import time
 import numpy as np
 
 list=sd.query_devices() ###use this to find the microphone
-#print(list)
+print(list)
 
 def CallMic(seconds,fs):
    # fs = 44100  # Sample rate
     # seconds = 3  # Duration of recording
-    sd.default.device=15,6 # Channels(0 is processed data, 1-4 raw data, 5 is playback data)
+    sd.default.device=17,6 # Channels(0 is processed data, 1-4 raw data, 5 is playback data)
     myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=6)
-    sd.wait()  # Wait until recording is finished
-    #write('output.wav', fs, myrecording)  # Save as WAV file 
+    #sd.wait()  # Wait until recording is finished
+    write('output.wav', fs, myrecording)  # Save as WAV file 
     return myrecording
 
 array=CallMic(10,16000)
