@@ -34,12 +34,12 @@ def updata_df(i):
 
     cur_dir=os.listdir(data_dir+data_type[i])
 
-    df = pd.read_csv(data_dir+data_type[i]+cur_dir[len(cur_dir)-1], sep=";")
-    del df["Unnamed: 4"]
+    df = pd.read_csv(data_dir+data_type[i]+cur_dir[len(cur_dir)-1], sep=",")
+    #del df["Unnamed: 4"]
     print(df)
-    lst=list_range(0,len(df.index),1/Hz)
+    #lst=list_range(0,len(df.index),1/Hz)
     
-    df['time [s]']=lst
+    #df['time [s]']=lst
 
     # print(lst)
     #print(len(df.index))
@@ -54,19 +54,20 @@ def updata_df_sound(i):
     data_type=["cam/","info/","scan/","sound/","weld/"]
 
     cur_dir=os.listdir(data_dir+data_type[i])
-    channels=['Channel 1','Channel 2']
-    df = pd.read_csv(data_dir+data_type[i]+cur_dir[len(cur_dir)-1], sep=',',header=None, names=channels)
+    #channels=['time [s]','Channel 1','Channel 2','Channel 3','Channel 4']
+    #df = pd.read_csv(data_dir+data_type[i]+cur_dir[len(cur_dir)-1], sep=',',header=None, names=channels)
     #print(df)
+    df = pd.read_csv(data_dir+data_type[i]+cur_dir[len(cur_dir)-1], sep=',')
 
-    df['Average']=(df['Channel 1']+df['Channel 2'])/2
+    #df['Average']=(df['Channel 1']+df['Channel 2'])/2
 
-    df['Frequency']=np.fft.fft(df['Average'])
+    #df['Frequency']=np.fft.fft(df['Average'])
     # print(lst)
     #print(len(df.index))
     #print(len(lst))
-    lst=list_range(0,len(df.index),1/Hz)
-    
-    df['time [s]']=lst
+    #lst=list_range(0,len(df.index),1/Hz)
+    print(df)
+    #df['time [s]']=lst
     return df
 
 

@@ -1,0 +1,63 @@
+
+/* body{
+    background-color:'#1a1a1a' ;
+}
+h1{
+    font-family: verdana;
+    color: '#f2f2f2';
+    text-align: center;
+}
+h2{
+    font-family: verdana;
+    color: '#f2f2f2';
+    text-align: center;
+}
+h3{
+    font-family: verdana;
+    color: '#f2f2f2';
+    text-align: center;
+}
+p{
+    font-family: verdana;
+    color: '#f2f2f2';
+    font-size: 20px;
+} */
+
+.content{
+    width: 100%;
+    background: #1a1a1a;
+    color: #d4d4d4;
+}
+   
+.right_content{
+    width:60%;
+    height: 100%;
+    background: #272727;
+    color: #d4d4d4;
+    position:absolute;
+
+    top: 0;
+    right: 0; 
+}
+   
+.top_metrics {
+    background: #1d1d1d;
+    color: #d4d4d4;
+    height: 200px;
+    width:100%;
+    position:relative;
+    top: 0;
+    right:0;
+}
+   
+.left_menu {
+    width: 40%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 999;
+    color: #d4d4d4;
+    background: #1a1a1a;
+   }
+
