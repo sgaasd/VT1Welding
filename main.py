@@ -47,22 +47,22 @@ def data_exchange_with_cowelder():
     initiate_weld_signal = "NULL"
     weldment_done = False
 
-    cap = cv.VideoCapture(1)
-    fourcc = cv.VideoWriter_fourcc(*"mp4v")
+#    cap = cv.VideoCapture(0)
+#    fourcc = cv.VideoWriter_fourcc(*"mp4v")
     today= datetime.today()
     cur_dir = os.getcwd()
     number=len(os.listdir(cur_dir+"/Data/cam"))+1
     test_name=str(today.year)+str(today.month)+str(today.day)
     test_name=str(test_name)+"_cam_"+str(number)+'.mp4'
-    ret = cap.set(cv.CAP_PROP_FRAME_WIDTH,1920)
-    ret = cap.set(cv.CAP_PROP_FRAME_HEIGHT,1080)
-    out = cv.VideoWriter('Data/cam/'+test_name, fourcc, 30.0, (1920, 1080))
+    #ret = cap.set(cv.CAP_PROP_FRAME_WIDTH,1920)
+    #ret = cap.set(cv.CAP_PROP_FRAME_HEIGHT,1080)
+#    out = cv.VideoWriter('Data/cam/'+test_name, fourcc, 30.0, (640, 480))
 
     while close_socket == False:
 
-        ret, frame = cap.read()
-        cv.waitKey(1)
-        cv.imshow('frame', frame)
+#        ret, frame = cap.read()
+#        cv.waitKey(1)
+#        cv.imshow('frame', frame)
 
         initiate_go_signal = input("Type 'start' to initiate program: ")
         welding_data_list = ["Current, Voltage, Wire-feed"]
@@ -70,8 +70,8 @@ def data_exchange_with_cowelder():
             while initiate_weld_signal == "NULL":
                 connection.send((bytes('(1)', 'ascii'))) #Sender signal til roboten om den skal starte
                 recieved_data = connection.recv(1024) # forventer at modtaget et signal om at den er kørt til svejseposition
-                if recieved_data.decode("utf-8") == 3:
-                #if recieved_data == int.to_bytes(3,4,'big'):
+                #if recieved_data.decode("utf-8") == 3:
+                if recieved_data == int.to_bytes(3,4,'big'):
                     welding_tip_in_position = True
                     initiate_weld_signal = input("Type 'weld' to start welding: ")
         if initiate_weld_signal == "weld" and welding_tip_in_position == True: #Start svejsning og begynder data indsamling
@@ -82,16 +82,21 @@ def data_exchange_with_cowelder():
             unix_time=time.mktime(unix_time.timetuple())
 
             while weldment_done == False: 
+                print("while loop")
+                connection.send((bytes('(2)', 'ascii')))
                 recieved_data = connection.recv(1024)
-                ret, frame = cap.read()
-                cv.waitKey(1)
-                cv.imshow('frame', frame)
-                out.write(frame) #Start saving the frames to the video
-                if recieved_data.decode("utf-8") == 4:
-                #if recieved_data == int.to_bytes(4,4,'big'):
+                print(recieved_data)
+#                ret, frame = cap.read()
+#                cv.waitKey(1)
+#                cv.imshow('frame', frame)
+#                out.write(frame) #Start saving the frames to the video
+                #if recieved_data.decode("utf-8") == 4:
+                if recieved_data == int.to_bytes(4,4,'big'):
                     weldment_done = True  
                 else:
+                    #welding_data_list.append(recieved_data.decode("utf-8"))
                     welding_data_list.append(recieved_data.decode("utf-8"))
+                    print("welding data saved")
             welding_tip_in_position = False        
             initiate_weld_signal = "NULL"
             #print(welding_data_list)
@@ -118,18 +123,18 @@ def data_exchange_with_cowelder():
             cols =  mic_df.columns.tolist()
             cols = cols[-1:] + cols[:-1]
             mic_df = mic_df[cols]
-            out.release()
+#            out.release()
 
             save_data(test_type="weld", data=welding_data_dataframe, rating=1)
             save_data(test_type="sound", data=mic_df, rating=1)
             weldment_done = False
 
-        if input("Continue to weld another piece press 'y' | shutdown press 'n': ") == "y":
+        if input("Continue to weld another piece press 'y' | shutdown press 'n': ") == "n":
             close_socket = True
             connection.send((bytes('(5)', 'ascii')))
             connection.close()
-            cap.release()
-            cv.destroyAllWindows()
+#            cap.release()
+#            cv.destroyAllWindows()
         else:
             pass
 
