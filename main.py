@@ -62,10 +62,10 @@ def data_exchange_with_cowelder():
             test_name=str(test_name)+"_cam_"+str(number)+'.mp4'
             ret = cap.set(cv.CAP_PROP_FRAME_WIDTH,1920)
             ret = cap.set(cv.CAP_PROP_FRAME_HEIGHT,1080)
-            out = cv.VideoWriter('Data/cam/'+test_name, fourcc, 20.0, (1920, 1080))
+            out = cv.VideoWriter('Data/cam/'+test_name, fourcc, 30.0, (1920, 1080))
             initiate = False
             #ret, frame = cap.read()
-#        cv.waitKey(1)
+#        cv.waitKey(1)start
 #        cv.imshow('frame', frame)
 
         initiate_go_signal = input("Type 'start' to initiate program: ")
@@ -80,7 +80,7 @@ def data_exchange_with_cowelder():
                     initiate_weld_signal = input("Type 'weld' to start welding: ")
         if initiate_weld_signal == "weld" and welding_tip_in_position == True: #Start svejsning og begynder data indsamling
             initiate_go_signal = "NULL"
-            Micdata=Microphones.CallMic(20,16000)
+            Micdata=Microphones.CallMic(60,16000)
             connection.send((bytes('(2)', 'ascii')))
             unix_time=datetime.now()
             unix_time=time.mktime(unix_time.timetuple())

@@ -10,18 +10,19 @@ print(list)
 def CallMic(seconds,fs):
    # fs = 44100  # Sample rate
     # seconds = 3  # Duration of recording
-    sd.default.device=17,6 # Channels(0 is processed data, 1-4 raw data, 5 is playback data)
+    sd.default.device=20,6 # Channels(0 is processed data, 1-4 raw data, 5 is playback data)
     myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=6)
     #sd.wait()  # Wait until recording is finished
-    write('output.wav', fs, myrecording)  # Save as WAV file 
+    write('output.wav', fs, myrecording) 
+    #write('channel_1.wav', fs, myrecording[:,1])  # Save as WAV file 
     return myrecording
 
-array=CallMic(10,16000)
+#array=CallMic(10,16000)
 
 def stoprec(array):
     sd.stop()
     print(array)
-
+    
     #np.savetxt("raw.csv", array, delimiter=",")
 
     print(len(array[0,:]))
@@ -40,11 +41,16 @@ def stoprec(array):
 
     cutarray=array[0:len(array[:,0])-datastop,:]
     cutarray = cutarray[:,1:5]
-
+    write('channel_1.wav', 16000, cutarray[:,1])
+    write('output.wav', 16000, cutarray) 
     #np.savetxt("cut.csv", cutarray, delimiter=",")
     return cutarray
 
 
+if __name__ == '__main__':
+    array=CallMic(20,16000)
+    time.sleep(5)
+    stoprec(array)
 
 
 
