@@ -118,17 +118,18 @@ def comment_data():
     
     return test_result,notes
 
-def save_meta(t_horizontal,t_vertical,discribtion,test_result,notes,rating):
-    list_of_inf=[t_horizontal,t_vertical,discribtion,test_result,notes]
+def save_meta(t_horizontal,t_vertical,discribtion,test_result,notes):
+    list_of_inf=[[t_horizontal,t_vertical,test_result,discribtion,notes]]
+    df_of_inf=pd.DataFrame(list_of_inf,columns=['Thickness_hor','Thickness_ver','Rating','Describtion','Notes'])
     print("saving data")
     today= datetime.today()
     test_name=str(today.year)+str(today.month)+str(today.day)
     cur_dir = os.getcwd()
     number=len(os.listdir(cur_dir+"/Data/meta"))+1
     number=f"{number:03d}"
-    test_name=str(test_name)+"_"+str(rating)+"_meta_"+str(number)+".csv"
+    test_name=str(test_name)+"_"+str(test_result)+"_meta_"+str(number)+".csv"
     print(test_name)
-    list_of_inf.to_csv("Data/meta/"+test_name,index=False)
+    df_of_inf.to_csv("Data/meta/"+test_name,index=False)
 
 #MetafileIndhold(Typetest=T-joint, Størrelse=10mm, Dato=Day/month, Nummer=1, Link til dataen)
 #DataNavn(Dato=Day/Month, Nummer=1)
@@ -251,5 +252,6 @@ def main():
 
 if __name__ == '__main__':
     #main()
-    meta_data()
-    comment_data()
+    t_horizontal,t_vertical,discribtion=meta_data()
+    test_result,notes=comment_data()
+    save_meta(t_horizontal,t_vertical,discribtion,test_result,notes)
