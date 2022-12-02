@@ -84,9 +84,9 @@ margin=dict(l=20, r=20, t=25, b=20)
 
 df_meta=openfiles.updata_df(1)
 print(df_meta)
-
+print(df_meta.iat[0,0])
 app = Dash(__name__)
-
+#df_meta['Thickness_hor'],df_meta['Thickness_ver'],df_meta['Rating'],df_meta['Describtion'],df_meta['Notes']
 app.layout= html.Div(className="content", children=[
     dcc.Interval(id='update_interval', disabled=False, interval=1*5000, n_intervals=0),
     html.Div(className="left_menu",children=[
@@ -107,8 +107,18 @@ app.layout= html.Div(className="content", children=[
     children=[
             html.Div(
             className="top_metrics",
-            children=[
-            'This is top metrics'
+            children=[html.Div(children=[
+            html.H1(children='Weld Information'),
+            html.Div(children=['Thickness of the horizontal plate: ',df_meta.iat[0,0]]),
+            html.Div(children=['Thickness of the vertical plate:   ',df_meta.iat[0,1]]),
+            html.Div(children=['Pass or fail (If 1 it passed): ',df_meta.iat[0,2]]),
+            ]),
+            html.Div(children=[
+            html.Div(children=['Description: ',df_meta.iat[0,3]])
+            ]),
+            html.Div(children=[
+            html.Div(children=['Any Notes: ',df_meta.iat[0,4]])
+            ])
             ]
         ),
         html.Div(className="bottem_right_menu",children=[html.H3(' Microphone data'),
