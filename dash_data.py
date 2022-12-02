@@ -21,7 +21,7 @@ colors = {
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
 
-
+past_len=0
 
 
 df=openfiles.updata_df(4)
@@ -137,65 +137,67 @@ app.layout= html.Div(className="content", children=[
 @app.callback(Output('graph-vol','figure'),Output('graph-cur','figure'),Output('graph-wir','figure'),Output('graph-ch1','figure'),Output('graph-ch2','figure'),Output('graph-ch3','figure'),Output('graph-ch4','figure'),Input('update_interval','n_intervals'))
 
 def update_figs_live(n):
-    df=openfiles.updata_df(4)
+    con,past_len=openfiles.new_measure_check(past_len)
+    if con==True:
+        df=openfiles.updata_df(4)
 
-    fig_vol=px.line(df,x="time [s]",y=' Voltage')
-    fig_vol.update_layout(
-    plot_bgcolor=colors['background'],
-    paper_bgcolor=colors['background'],
-    font_color=colors['text'],
-    )
+        fig_vol=px.line(df,x="time [s]",y=' Voltage')
+        fig_vol.update_layout(
+        plot_bgcolor=colors['background'],
+        paper_bgcolor=colors['background'],
+        font_color=colors['text'],
+        )
 
-    fig_cur=px.line(df,x="time [s]",y="Current")
-    fig_cur.update_layout(
-    plot_bgcolor=colors['background'],
-    paper_bgcolor=colors['background'],
-    font_color=colors['text'],
-    )
+        fig_cur=px.line(df,x="time [s]",y="Current")
+        fig_cur.update_layout(
+        plot_bgcolor=colors['background'],
+        paper_bgcolor=colors['background'],
+        font_color=colors['text'],
+        )
 
-    fig_wir=px.line(df,x="time [s]",y=" Wire-feed")
-    fig_wir.update_layout(
-    plot_bgcolor=colors['background'],
-    paper_bgcolor=colors['background'],
-    font_color=colors['text'],
-    )
+        fig_wir=px.line(df,x="time [s]",y=" Wire-feed")
+        fig_wir.update_layout(
+        plot_bgcolor=colors['background'],
+        paper_bgcolor=colors['background'],
+        font_color=colors['text'],
+        )
 
-    df=openfiles.updata_df_sound(3)
+        df=openfiles.updata_df_sound(3)
 
-    fig_ch1=px.line(df,x="time [s]",y="Channel_1",title='Channel 1 data')
-    fig_ch1.update_layout(
-    plot_bgcolor=colors['background2'],
-    paper_bgcolor=colors['background2'],
-    font_color=colors['text'],
-    margin=dict(l=20, r=20, t=25, b=20)
-    )
+        fig_ch1=px.line(df,x="time [s]",y="Channel_1",title='Channel 1 data')
+        fig_ch1.update_layout(
+        plot_bgcolor=colors['background2'],
+        paper_bgcolor=colors['background2'],
+        font_color=colors['text'],
+        margin=dict(l=20, r=20, t=25, b=20)
+        )
 
-    fig_ch2=px.line(df,x="time [s]",y="Channel_2",title='Channel 2 data')
-    fig_ch2.update_layout(
-    plot_bgcolor=colors['background2'],
-    paper_bgcolor=colors['background2'],
-    font_color=colors['text'],
-    margin=dict(l=20, r=20, t=25, b=20)
-    )
+        fig_ch2=px.line(df,x="time [s]",y="Channel_2",title='Channel 2 data')
+        fig_ch2.update_layout(
+        plot_bgcolor=colors['background2'],
+        paper_bgcolor=colors['background2'],
+        font_color=colors['text'],
+        margin=dict(l=20, r=20, t=25, b=20)
+        )
 
-    fig_ch3=px.line(df,x="time [s]",y="Channel_3",title='Channel 3 data')
-    fig_ch3.update_layout(
-    plot_bgcolor=colors['background2'],
-    paper_bgcolor=colors['background2'],
-    font_color=colors['text'],
-    margin=dict(l=20, r=20, t=25, b=20)
-    )
+        fig_ch3=px.line(df,x="time [s]",y="Channel_3",title='Channel 3 data')
+        fig_ch3.update_layout(
+        plot_bgcolor=colors['background2'],
+        paper_bgcolor=colors['background2'],
+        font_color=colors['text'],
+        margin=dict(l=20, r=20, t=25, b=20)
+        )
 
-    fig_ch4=px.line(df,x="time [s]",y="Channel_4",title='Channel 4 data')
-    fig_ch4.update_layout(
-    plot_bgcolor=colors['background2'],
-    paper_bgcolor=colors['background2'],
-    font_color=colors['text'],
-    margin=dict(l=20, r=20, t=25, b=20)
-    )
+        fig_ch4=px.line(df,x="time [s]",y="Channel_4",title='Channel 4 data')
+        fig_ch4.update_layout(
+        plot_bgcolor=colors['background2'],
+        paper_bgcolor=colors['background2'],
+        font_color=colors['text'],
+        margin=dict(l=20, r=20, t=25, b=20)
+        )
 
 
-    return fig_vol,fig_cur,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4
+        return fig_vol,fig_cur,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4
 
 
 
