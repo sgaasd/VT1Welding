@@ -1,7 +1,7 @@
 # Run this app with `python app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
 
-from dash import Dash,html, dcc
+from dash import Dash,html, dcc, no_update, exceptions
 import plotly.express as px
 import pandas as pd
 import openfiles
@@ -21,9 +21,8 @@ colors = {
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
 
+
 past_len=0
-
-
 df=openfiles.updata_df(4)
 
 fig_vol=px.line(df,x="time [s]",y=' Voltage')
@@ -83,6 +82,9 @@ margin=dict(l=20, r=20, t=25, b=20)
 
 #fig_scan.show()
 
+df_meta=openfiles.updata_df(1)
+print(df_meta)
+
 app = Dash(__name__)
 
 app.layout= html.Div(className="content", children=[
@@ -130,13 +132,16 @@ app.layout= html.Div(className="content", children=[
             
 
         ),
-    ])
-
+    ]),
+dcc.Store(id='determine_update')
 ])
 
-@app.callback(Output('graph-vol','figure'),Output('graph-cur','figure'),Output('graph-wir','figure'),Output('graph-ch1','figure'),Output('graph-ch2','figure'),Output('graph-ch3','figure'),Output('graph-ch4','figure'),Input('update_interval','n_intervals'))
+@app.callback(Output('graph-vol','figure'),Output('graph-cur','figure'),Output('graph-wir','figure'),Output('graph-ch1','figure'),Output('graph-ch2','figure'),Output('graph-ch3','figure'),Output('graph-ch4','figure'),Output('determine_update','data'),Input('update_interval','n_intervals'),Input('determine_update','data'))
 
-def update_figs_live(n):
+def update_figs_live(n,past_len):
+    if n==0:
+        past_len=0
+    
     con,past_len=openfiles.new_measure_check(past_len)
     if con==True:
         df=openfiles.updata_df(4)
@@ -197,7 +202,9 @@ def update_figs_live(n):
         )
 
 
-        return fig_vol,fig_cur,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4
+        return fig_vol,fig_cur,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4,past_len
+    
+    return no_update,no_update,no_update,no_update,no_update,no_update,no_update,past_len
 
 
 

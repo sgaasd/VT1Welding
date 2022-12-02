@@ -30,7 +30,7 @@ def new_measure_check(previous):
 def updata_df(i):
     Hz=10
     data_dir="Data/"
-    data_type=["cam/","info/","scan/","sound/","weld/"]
+    data_type=["cam/","meta/","scan/","sound/","weld/"]
 
     cur_dir=os.listdir(data_dir+data_type[i])
 
