@@ -92,11 +92,11 @@ def comment_data():
         input_var=input("Did the weld pass as a class c weldment\"y\" or \"n\":")
         if input_var =="y":
             print("\n")
-            test_result=True
+            test_result=1
             no_answer=False
         elif input_var =="n":
             print("\n")
-            test_result=False
+            test_result=0
             no_answer=False
         else:
             print("\n")
@@ -116,7 +116,19 @@ def comment_data():
             print("Then try again")
 
     
-    return notes,test_result
+    return test_result,notes
+
+def save_meta(t_horizontal,t_vertical,discribtion,test_result,notes,rating):
+    list_of_inf=[t_horizontal,t_vertical,discribtion,test_result,notes]
+    print("saving data")
+    today= datetime.today()
+    test_name=str(today.year)+str(today.month)+str(today.day)
+    cur_dir = os.getcwd()
+    number=len(os.listdir(cur_dir+"/Data/meta"))+1
+    number=f"{number:03d}"
+    test_name=str(test_name)+"_"+str(rating)+"_meta_"+str(number)+".csv"
+    print(test_name)
+    list_of_inf.to_csv("Data/meta/"+test_name,index=False)
 
 #MetafileIndhold(Typetest=T-joint, Størrelse=10mm, Dato=Day/month, Nummer=1, Link til dataen)
 #DataNavn(Dato=Day/Month, Nummer=1)
