@@ -29,6 +29,95 @@ def list_range(start, end, step):
         lst.append(start)
     return lst
 
+def tocontinue():
+    while True:
+        input_var=input("If you are ready to continue type \"y\": ")
+        if input_var =="y":
+            print("\n")
+
+        else:
+            print("You have to choose yes or no by typing \"y\" or \"n\" \n")
+        
+        break
+
+
+
+def meta_data():
+    no_answer=True
+    while no_answer == True:
+        input_var=input("What is the thickness of the horizontal parent material in mm: ")
+        try:
+            t_horizontal = int(input_var)
+
+            print(t_horizontal)
+            no_answer=False
+        except ValueError:
+            print('The provided value is not an integer try again')
+        print("\n")
+    
+    no_answer=True
+    while no_answer == True:
+        input_var=input("What is the thickness of the vertical parent material in mm: ")
+        try:
+            t_vertical = int(input_var)
+
+            print(t_vertical)
+            no_answer=False
+        except ValueError:
+            print('The provided value is not an integer try again')
+        print("\n")
+    
+    no_answer=True
+    while no_answer == True:
+        discribtion=input("Describtion of experiment: ")
+        print("Your describtion was: " + discribtion)
+        print("\n")
+        input_var=input("Confirm if correct or try again by typing \"y\" or \"n\":")
+        if input_var =="y":
+            print("\n")
+            no_answer=False
+        elif input_var =="n":
+            print("\n")
+            print("Then try again")
+    return t_horizontal,t_vertical,discribtion
+
+
+
+
+        
+
+def comment_data():
+    no_answer=True
+    while no_answer == True:
+        input_var=input("Did the weld pass as a class c weldment\"y\" or \"n\":")
+        if input_var =="y":
+            print("\n")
+            test_result=True
+            no_answer=False
+        elif input_var =="n":
+            print("\n")
+            test_result=False
+            no_answer=False
+        else:
+            print("\n")
+            print("You have to choose yes or no by typing \"y\" or \"n\" \n")
+
+    no_answer=True
+    while no_answer == True:
+        notes=input("Notes after experiment (remember to write why it did or didn't pass): ")
+        print("Your notes where: " + notes)
+        print("\n")
+        input_var=input("Confirm if correct or try again by typing \"y\" or \"n\":")
+        if input_var =="y":
+            print("\n")
+            no_answer=False
+        elif input_var =="n":
+            print("\n")
+            print("Then try again")
+
+    
+    return notes,test_result
+
 #MetafileIndhold(Typetest=T-joint, Størrelse=10mm, Dato=Day/month, Nummer=1, Link til dataen)
 #DataNavn(Dato=Day/Month, Nummer=1)
 #DataIndhold(time, Current, Voltage, WireFeeder, Velosity, Sound)
@@ -149,4 +238,6 @@ def main():
     data_exchange_with_cowelder()
 
 if __name__ == '__main__':
-    main()
+    #main()
+    meta_data()
+    comment_data()

@@ -115,7 +115,7 @@ def uptime():
     print(timelist)
     print(minlist)
     print(str(round(util,2))+'%')
-    return path
+    return (str(round(util,2)) + '%')
 
 
 if __name__ == '__main__':
