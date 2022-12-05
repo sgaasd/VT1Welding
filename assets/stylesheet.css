@@ -31,7 +31,7 @@ p{
    
 .right_content{
     width:60%;
-    height: 100%;
+    height: 100vh;
     background: #272727;
     color: #d4d4d4;
     position:absolute;
@@ -43,7 +43,7 @@ p{
 .top_metrics {
     background: #1d1d1d;
     color: #d4d4d4;
-    height: 200px;
+    height: 15.4vh;
     width:100%;
     position:relative;
     top: 0;
@@ -55,7 +55,7 @@ p{
     position: absolute;
     top: 0;
     left: 0;
-    height: 100%;
+    height: 100vh;
     z-index: 999;
     color: #d4d4d4;
     background: #1a1a1a;
