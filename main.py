@@ -45,7 +45,10 @@ def tocontinue():
 
 current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=0,0,0,0,0,0,0
 def meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion):
-    input_var=input("Is this a new test \"y\" or \"n\":")
+    if t_horizontal==0:
+        input_var="y"
+    else:
+        input_var=input("Is this a new test \"y\" or \"n\":")
     if input_var =="y":
         print("\n")
         #current
