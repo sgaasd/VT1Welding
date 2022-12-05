@@ -7,10 +7,11 @@ import pandas as pd
 import openfiles
 from dash.dependencies import Input, Output
 import plotly.graph_objects as go
+import dash_bootstrap_components as dbc
+external_stylesheets = [dbc.themes.BOOTSTRAP]
 
-
-app = Dash(__name__)
-
+app = Dash(__name__,external_stylesheets=external_stylesheets)
+#app = Dash(__name__)
 colors = {
     'background': '#343434',
     'text': '#f2f2f2',
@@ -85,12 +86,12 @@ margin=dict(l=20, r=20, t=25, b=20)
 df_meta=openfiles.updata_df(1)
 print(df_meta)
 print(df_meta.iat[0,0])
-app = Dash(__name__)
+#app = Dash(__name__)
 #df_meta['Thickness_hor'],df_meta['Thickness_ver'],df_meta['Rating'],df_meta['Describtion'],df_meta['Notes']
 app.layout= html.Div(className="content", children=[
-    dcc.Interval(id='update_interval', disabled=False, interval=1*5000, n_intervals=0),
+    dcc.Interval(id='update_interval', disabled=False, interval=1*1000, n_intervals=0),
     html.Div(className="left_menu",children=[
-    html.H1('Data Visualisation of robot welding'),
+    html.H1('Data Visualisation of Robotic Welding',style={'margin-top':   '5px','margin-left':  '10px'}),
     #html.Hr(style={'width': '95%'}),
     dcc.Graph(
     id='graph-vol',
@@ -108,18 +109,41 @@ app.layout= html.Div(className="content", children=[
             html.Div(
             className="top_metrics",
             children=[html.Div(children=[
-            html.H1(children='Weld Information'),
-            html.Div(children=['Thickness of the horizontal plate [mm]: ',df_meta.iat[0,0]]),
-            html.Div(children=['Thickness of the vertical plate [mm]:   ',df_meta.iat[0,1]]),
-            html.Div(children=['Pass or fail (If 1 it passed): ',df_meta.iat[0,2]]),
-            ]),
-            html.Div(children=[
-            html.Div(children=['Description: ',df_meta.iat[0,3]])
-            ]),
-            html.Div(children=[
-            html.Div(children=['Any Notes: ',df_meta.iat[0,4]])
-            ])
-            ]
+            html.H1(children='Weld Information',style={
+                               'margin-top':   '0px',
+                               'margin-left':  '0px',
+                               'font-size': '25px'})]),
+            html.Div([
+                dbc.Row([
+                    dbc.Col(html.Div(['Thickness bottom plate [mm]: ']), width=4),
+                    dbc.Col(html.Div(df_meta.iat[0,9]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=4),
+                    dbc.Col(html.Div(df_meta.iat[0,10]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Gas flow [L/min]: ']), width=4),
+                    dbc.Col(html.Div(df_meta.iat[0,14]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=4),
+                    dbc.Col(html.Div(df_meta.iat[0,13]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Input Current [A]: ']), width=4),
+                    dbc.Col(html.Div(df_meta.iat[0,11]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Input Voltage [V]']), width=4),
+                    dbc.Col(html.Div(df_meta.iat[0,12]), width="auto")
+                ]),                
+                dbc.Row([
+                    dbc.Col(html.Div(['Pass or fail: ']), width=4),
+                    dbc.Col(html.Div(df_meta.iat[0,5]), width="auto")
+                ])
+            ])]
+
         ),
         html.Div(className="bottem_right_menu",children=[html.H3(' Microphone data'),
             dcc.Graph(

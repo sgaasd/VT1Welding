@@ -21,7 +21,7 @@ def new_measure_check(previous):
     weld_dir=os.listdir(data_dir+data_type[4])
 
     now=len(weld_dir)
-    if now>previous:
+    if now != previous:
         return True, now
     else:
         return False, now
