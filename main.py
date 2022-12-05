@@ -21,6 +21,7 @@ def save_data(test_type,data,rating):
     test_name=str(test_name)+"_"+str(rating)+"_"+str(test_type)+"_"+str(number)+".csv"
     print(test_name)
     data.to_csv("Data/"+str(test_type)+"/"+test_name,index=False)
+    return "Data/"+str(test_type)+"/"+test_name
 
 def list_range(start, end, step):
     lst=[start]
@@ -41,45 +42,102 @@ def tocontinue():
         break
 
 
-
-def meta_data():
-    no_answer=True
-    while no_answer == True:
-        input_var=input("What is the thickness of the horizontal parent material in mm: ")
-        try:
-            t_horizontal = int(input_var)
-
-            print(t_horizontal)
-            no_answer=False
-        except ValueError:
-            print('The provided value is not an integer try again')
+current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=0,0,0,0,0,0,0
+def meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion):
+    input_var=input("Is this a new test \"y\" or \"n\":")
+    if input_var =="y":
         print("\n")
-    
-    no_answer=True
-    while no_answer == True:
-        input_var=input("What is the thickness of the vertical parent material in mm: ")
-        try:
-            t_vertical = int(input_var)
+        #current
+        no_answer=True
+        while no_answer == True:
+            input_var=input("What is the current input on the welding machine [A]: ")
+            try:
+                current = float(input_var)
 
-            print(t_vertical)
-            no_answer=False
-        except ValueError:
-            print('The provided value is not an integer try again')
-        print("\n")
-    
-    no_answer=True
-    while no_answer == True:
-        discribtion=input("Describtion of experiment: ")
-        print("Your describtion was: " + discribtion)
-        print("\n")
-        input_var=input("Confirm if correct or try again by typing \"y\" or \"n\":")
-        if input_var =="y":
+                print(current)
+                no_answer=False
+            except ValueError:
+                print('The provided value is not an float try again')
             print("\n")
-            no_answer=False
-        elif input_var =="n":
+        #voltage
+        no_answer=True
+        while no_answer == True:
+            input_var=input("What is the voltage input on the welding machine [V]: ")
+            try:
+                voltage = float(input_var)
+
+                print(voltage)
+                no_answer=False
+            except ValueError:
+                print('The provided value is not an float try again')
             print("\n")
-            print("Then try again")
-    return t_horizontal,t_vertical,discribtion
+        #wirefeed
+        no_answer=True
+        while no_answer == True:
+            input_var=input("What is the wire feed speed [mm/min]: ")
+            try:
+                wirefeed = float(input_var)
+
+                print(wirefeed)
+                no_answer=False
+            except ValueError:
+                print('The provided value is not an float try again')
+            print("\n")
+        #gas
+        no_answer=True
+        while no_answer == True:
+            input_var=input("What is the gas flow [L/min]: ")
+            try:
+                gas_flow = float(input_var)
+
+                print(gas_flow)
+                no_answer=False
+            except ValueError:
+                print('The provided value is not an float try again')
+            print("\n")
+        
+        no_answer=True
+        while no_answer == True:
+            input_var=input("What is the thickness of the horizontal parent material in mm: ")
+            try:
+                t_horizontal = float(input_var)
+
+                print(t_horizontal)
+                no_answer=False
+            except ValueError:
+                print('The provided value is not an float try again')
+            print("\n")
+        
+        no_answer=True
+        while no_answer == True:
+            input_var=input("What is the thickness of the vertical parent material in mm: ")
+            try:
+                t_vertical = float(input_var)
+
+                print(t_vertical)
+                no_answer=False
+            except ValueError:
+                print('The provided value is not an float try again')
+            print("\n")
+        
+        no_answer=True
+        while no_answer == True:
+            discribtion=input("Describtion of experiment: ")
+            print("Your describtion was: " + discribtion)
+            print("\n")
+            input_var=input("Confirm if correct or try again by typing \"y\" or \"n\":")
+            if input_var =="y":
+                print("\n")
+                no_answer=False
+            elif input_var =="n":
+                print("\n")
+                print("Then try again")
+        return current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion
+    elif input_var =="n":
+        print("\n")
+        return current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion
+        
+        
 
 
 
@@ -117,13 +175,14 @@ def comment_data():
 
     
     return test_result,notes
-
-def save_meta(t_horizontal,t_vertical,discribtion,test_result,notes):
-    list_of_inf=[[t_horizontal,t_vertical,test_result,discribtion,notes]]
-    df_of_inf=pd.DataFrame(list_of_inf,columns=['Thickness_hor','Thickness_ver','Rating','Describtion','Notes'])
-    print("saving data")
+#save_meta(t_horizontal,t_vertical,discribtion,test_result,notes):
+def save_meta(test_nb,start_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes):
     today= datetime.today()
     test_name=str(today.year)+str(today.month)+str(today.day)
+    list_of_inf=[[test_nb,test_name,start_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes]]
+    df_of_inf=pd.DataFrame(list_of_inf,columns=['Test_number','Date_y_m_d','Start time [unis ms]','Sample_rate_weld','Sample_rate_sound','Rating','Path_sound','Path_weld','Path_video','Thickness_hor','Thickness_ver','Current','Voltage','Wire_feed','Gas_flow','Describtion','Notes'])
+    print("saving data")
+    
     cur_dir = os.getcwd()
     number=len(os.listdir(cur_dir+"/Data/meta"))+1
     number=f"{number:03d}"
@@ -165,6 +224,7 @@ def data_exchange_with_cowelder():
             ret = cap.set(cv.CAP_PROP_FRAME_WIDTH,1920)
             ret = cap.set(cv.CAP_PROP_FRAME_HEIGHT,1080)
             out = cv.VideoWriter('Data/cam/'+test_name, fourcc, 30.0, (1920, 1080))
+            path_video='Data/cam/'+test_name
             initiate = False
             #ret, frame = cap.read()
 #        cv.waitKey(1)start
@@ -185,7 +245,7 @@ def data_exchange_with_cowelder():
             Micdata=Microphones.CallMic(60,16000)
             connection.send((bytes('(2)', 'ascii')))
             unix_time=datetime.now()
-            unix_time=time.mktime(unix_time.timetuple())
+            unix_time=time.mktime(unix_time.timetuple()) + unix_time.microsecond/1e3
 
             while weldment_done == False: 
                 print("while loop")
@@ -213,8 +273,8 @@ def data_exchange_with_cowelder():
             new_header = welding_data_dataframe.iloc[0] #grab the first row for the headery
             welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
             welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
-            Hz=10
-            lst=list_range(unix_time,len(welding_data_dataframe.index),1/Hz)
+            Hz_weld=100
+            lst=list_range(unix_time,len(welding_data_dataframe.index),1/Hz_weld)
             welding_data_dataframe['time [s]']=lst
 
             cols =  welding_data_dataframe.columns.tolist()
@@ -224,16 +284,16 @@ def data_exchange_with_cowelder():
             #print(welding_data_dataframe)
             Micdata=Microphones.stoprec(Micdata)
             mic_df=pd.DataFrame(Micdata,columns=['Channel_1','Channel_2','Channel_3','Channel_4'])
-            Hz=16000
-            lst=list_range(unix_time,len(mic_df.index),1/Hz)
+            Hz_sound=16000
+            lst=list_range(unix_time,len(mic_df.index),1/Hz_sound)
             mic_df['time [s]']=lst
             cols =  mic_df.columns.tolist()
             cols = cols[-1:] + cols[:-1]
             mic_df = mic_df[cols]
             out.release()
 
-            save_data(test_type="weld", data=welding_data_dataframe, rating=1)
-            save_data(test_type="sound", data=mic_df, rating=1)
+            path_weld=save_data(test_type="weld", data=welding_data_dataframe, rating=1)
+            path_sound=save_data(test_type="sound", data=mic_df, rating=1)
             weldment_done = False
 
         if input("Continue to weld another piece press 'y' | shutdown press 'n': ") == "n":
@@ -252,6 +312,9 @@ def main():
 
 if __name__ == '__main__':
     #main()
-    t_horizontal,t_vertical,discribtion=meta_data()
+    current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion)
     test_result,notes=comment_data()
-    save_meta(t_horizontal,t_vertical,discribtion,test_result,notes)
+    cur_dir = os.getcwd()
+    number=len(os.listdir(cur_dir+"/Data/cam"))+1
+
+    save_meta(number,unix_time,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)

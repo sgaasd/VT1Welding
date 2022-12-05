@@ -90,7 +90,7 @@ app = Dash(__name__)
 app.layout= html.Div(className="content", children=[
     dcc.Interval(id='update_interval', disabled=False, interval=1*5000, n_intervals=0),
     html.Div(className="left_menu",children=[
-    html.H1('   Data Visualisation of welding data'),
+    html.H1('Data Visualisation of robot welding'),
     #html.Hr(style={'width': '95%'}),
     dcc.Graph(
     id='graph-vol',
@@ -109,8 +109,8 @@ app.layout= html.Div(className="content", children=[
             className="top_metrics",
             children=[html.Div(children=[
             html.H1(children='Weld Information'),
-            html.Div(children=['Thickness of the horizontal plate: ',df_meta.iat[0,0]]),
-            html.Div(children=['Thickness of the vertical plate:   ',df_meta.iat[0,1]]),
+            html.Div(children=['Thickness of the horizontal plate [mm]: ',df_meta.iat[0,0]]),
+            html.Div(children=['Thickness of the vertical plate [mm]:   ',df_meta.iat[0,1]]),
             html.Div(children=['Pass or fail (If 1 it passed): ',df_meta.iat[0,2]]),
             ]),
             html.Div(children=[
