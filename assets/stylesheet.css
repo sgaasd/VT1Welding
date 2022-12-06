@@ -25,18 +25,18 @@ p{
 
 .content{
     width: 100%;
-    background: #1a1a1a;
+    background: #343434;
     color: #d4d4d4;
 }
    
 .right_content{
     width:60%;
-    height: 100vh;
+    height: 98vh;
     overflow: scroll;
+    margin-top: 1%;
     background: #272727;
     color: #d4d4d4;
     position:absolute;
-
     top: 0;
     right: 0; 
 }
@@ -56,7 +56,8 @@ p{
     position: absolute;
     top: 0;
     left: 0;
-    height: 100vh;
+    margin-top: 1%;
+    height: 98vh;
     z-index: 999;
     color: #d4d4d4;
     background: #1a1a1a;
