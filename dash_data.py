@@ -95,7 +95,7 @@ app.layout= html.Div(className="content", children=[
     dcc.Interval(id='update_interval', disabled=False, interval=1*1000, n_intervals=0),
     html.Div(className="left_menu",children=[
     html.H1('Data Visualisation of Robotic Welding',style={'margin-top':   '5px','margin-left':  '10px'}),
-    html.Hr(style={'width': '95%'}),
+    #html.Hr(style={'width': '95%'}),
     dcc.Graph(
     id='graph-vol',
     figure=fig_vol,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
@@ -124,36 +124,36 @@ app.layout= html.Div(className="content", children=[
             html.Div([
                 dbc.Row([dbc.Col([
                     dbc.Row([
-                        dbc.Col(html.Div(['Thickness bottom plate [mm]: ']), width=5),
+                        dbc.Col(html.Div(['Thickness bottom plate [mm]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[0,9]), width="auto")
                     ]),
                     dbc.Row([
-                        dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=5),
+                        dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[0,10]), width="auto")
                     ]),
                     dbc.Row([
-                        dbc.Col(html.Div(['Gas flow [L/min]: ']), width=5),
+                        dbc.Col(html.Div(['Gas flow [L/min]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[0,14]), width="auto")
                     ]),
                     dbc.Row([
-                        dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=5),
+                        dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[0,13]), width="auto")
                     ]),
                     dbc.Row([
-                        dbc.Col(html.Div(['Input Current [A]: ']), width=5),
+                        dbc.Col(html.Div(['Input Current [A]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[0,11]), width="auto")
                     ]),
                     dbc.Row([
-                        dbc.Col(html.Div(['Input Voltage [V]']), width=5),
+                        dbc.Col(html.Div(['Input Voltage [V]']), width=8),
                         dbc.Col(html.Div(df_meta.iat[0,12]), width="auto")
                     ]),                
                     dbc.Row([
-                        dbc.Col(html.Div(['Pass or fail: ']), width=5),
+                        dbc.Col(html.Div(['Pass or fail: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[0,5]), width="auto")
                     ])
             ]),             
                 dbc.Col([
-                    html.H1("Notes for test: ",style={
+                    html.H1("Description of test: ",style={
                                'margin-top':   '0px',
                                'margin-left':  '0px',
                                'font-size': '20px'}),
@@ -161,7 +161,7 @@ app.layout= html.Div(className="content", children=[
                 
                 ]),
                 dbc.Col([
-                    html.H1("Description of test: ",style={
+                    html.H1("Notes for test: ",style={
                                'margin-top':   '0px',
                                'margin-left':  '0px',
                                'font-size': '20px'}),

@@ -32,6 +32,7 @@ p{
 .right_content{
     width:60%;
     height: 100vh;
+    overflow: scroll;
     background: #272727;
     color: #d4d4d4;
     position:absolute;
@@ -43,7 +44,7 @@ p{
 .top_metrics {
     background: #1d1d1d;
     color: #d4d4d4;
-    height: 15.4vh;
+    height: 23vh;
     width:100%;
     position:relative;
     top: 0;
