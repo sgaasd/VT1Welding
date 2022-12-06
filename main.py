@@ -185,6 +185,16 @@ def save_meta(test_nb,start_t,sample_rate_weld,sample_rate_sound,test_result,pat
     test_name=str(today.year)+str(today.month)+str(today.day)
     list_of_inf=[[test_nb,test_name,start_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes]]
     df_of_inf=pd.DataFrame(list_of_inf,columns=['Test_number','Date_y_m_d','Start_time_[unix_ms]','Sample_rate_weld[Hz]','Sample_rate_sound[Hz]','Rating','Path_sound','Path_weld','Path_video','Thickness_hor[mm]','Thickness_ver[mm]','Current[A*10]','Voltage[V*10]','Wire_feed[m/min]','Gas_flow[L/min]','Describtion','Notes'])
+    
+
+    data_dir="Data/"
+    data_type=["cam/","meta/","scan/","sound/","weld/"]
+
+    cur_dir=os.listdir(data_dir+data_type[1])
+
+    df = pd.read_csv(data_dir+data_type[1]+cur_dir[len(cur_dir)-1], sep=",")
+
+    df = df.append(df_of_inf, ignore_index = True)
     print("saving data")
     
     cur_dir = os.getcwd()
@@ -192,7 +202,7 @@ def save_meta(test_nb,start_t,sample_rate_weld,sample_rate_sound,test_result,pat
     number=f"{number:03d}"
     test_name=str(test_name)+"_"+str(test_result)+"_meta_"+str(number)+".csv"
     print(test_name)
-    df_of_inf.to_csv("Data/meta/"+test_name,index=False)
+    df.to_csv("Data/meta/meta.csv",index=False)
 
 #MetafileIndhold(Typetest=T-joint, Størrelse=10mm, Dato=Day/month, Nummer=1, Link til dataen)
 #DataNavn(Dato=Day/Month, Nummer=1)
