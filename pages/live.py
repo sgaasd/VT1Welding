@@ -46,7 +46,7 @@ font_color=colors['text'],
 margin=dict(l=20, r=20, t=35, b=20)
 )
 
-df=openfiles.updata_df_sound(3)
+df=openfiles.updata_df(3)
 
 fig_ch1=px.line(df,x="time [s]",y="Channel_1",title='Channel 1 data')
 fig_ch1.update_layout(
