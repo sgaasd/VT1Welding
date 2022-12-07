@@ -5,7 +5,7 @@ import pandas as pd
 import cv2 as cv
 import Microphones
 import time
-
+import numpy as np
 
 '''
 Style guide comes from: 
@@ -23,13 +23,6 @@ def save_data(test_type,data,rating):
     print(test_name)
     data.to_csv("Data/"+str(test_type)+"/"+test_name,index=False)
     return "Data/"+str(test_type)+"/"+test_name
-
-def list_range(start, end, step):
-    lst=[start]
-    for i in range(1,end):
-        start=start+step
-        lst.append(start)
-    return lst
 
 def tocontinue():
     while True:
@@ -265,8 +258,8 @@ def data_exchange_with_cowelder():
             initiate_go_signal = "NULL"
             Micdata=Microphones.CallMic(60,16000)
             connection.send((bytes('(2)', 'ascii')))
-            unix_time=datetime.now()
-            unix_time=time.mktime(unix_time.timetuple()) + unix_time.microsecond/1e3
+            unix_time_start=datetime.now()
+            unix_time_start=time.mktime(unix_time_start.timetuple()) + unix_time_start.microsecond/1e3
 
             while weldment_done == False: 
                 print("while loop")
@@ -280,6 +273,8 @@ def data_exchange_with_cowelder():
                 #if recieved_data.decode("utf-8") == 4:
                 if recieved_data == int.to_bytes(4,4,'big'):
                     connection.send((bytes('(0)', 'ascii')))
+                    unix_time_end=datetime.now()
+                    unix_time_end=time.mktime(unix_time_end.timetuple()) + unix_time_end.microsecond/1e3
                     weldment_done = True  
                 else:
                     #welding_data_list.append(recieved_data.decode("utf-8"))
@@ -295,7 +290,7 @@ def data_exchange_with_cowelder():
             welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
             welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
             Hz_weld=100
-            lst=list_range(unix_time,len(welding_data_dataframe.index),1/Hz_weld)
+            lst=np.linspace(unix_time_start,unix_time_end,len(welding_data_dataframe.index))
             welding_data_dataframe['time [s]']=lst
 
             cols =  welding_data_dataframe.columns.tolist()
@@ -306,7 +301,7 @@ def data_exchange_with_cowelder():
             Micdata=Microphones.stoprec(Micdata)
             mic_df=pd.DataFrame(Micdata,columns=['Channel_1','Channel_2','Channel_3','Channel_4'])
             Hz_sound=16000
-            lst=list_range(unix_time,len(mic_df.index),1/Hz_sound)
+            lst=np.linspace(unix_time_start,unix_time_end,len(mic_df.index))
             mic_df['time [s]']=lst
             cols =  mic_df.columns.tolist()
             cols = cols[-1:] + cols[:-1]
@@ -338,4 +333,4 @@ if __name__ == '__main__':
     cur_dir = os.getcwd()
     number=len(os.listdir(cur_dir+"/Data/cam"))+1
 
-    df_last_settings=save_meta(number,unix_time,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
+    df_last_settings=save_meta(number,unix_time_start,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
