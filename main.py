@@ -11,19 +11,20 @@ import numpy as np
 Style guide comes from: 
 https://google.github.io/styleguide/pyguide.html#3164-guidelines-derived-from-guidos-recommendations
 '''
-
-def save_data(test_type,data,rating):
+#Saves and names a data frame based on the type and a rating of the weldment
+def save_data(data_type,data,rating):
     print("saving data")
     today= datetime.today()
     test_name=str(today.year)+str(today.month)+str(today.day)
     cur_dir = os.getcwd()
-    number=len(os.listdir(cur_dir+"/Data/"+test_type))+1
+    number=len(os.listdir(cur_dir+"/Data/"+data_type))+1
     number=f"{number:03d}"
-    test_name=str(test_name)+"_"+str(rating)+"_"+str(test_type)+"_"+str(number)+".csv"
+    test_name=str(test_name)+"_"+str(rating)+"_"+str(data_type)+"_"+str(number)+".csv"
     print(test_name)
-    data.to_csv("Data/"+str(test_type)+"/"+test_name,index=False)
-    return "Data/"+str(test_type)+"/"+test_name
+    data.to_csv("Data/"+str(data_type)+"/"+test_name,index=False)
+    return "Data/"+str(data_type)+"/"+test_name
 
+#simple function to pause the program until the user is rady to continue
 def tocontinue():
     while True:
         input_var=input("If you are ready to continue type \"y\": ")
@@ -38,6 +39,7 @@ def tocontinue():
 
 current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=0,0,0,0,0,0,0
 df_last_setting=0
+#function for inputting the metadata that cant be collected automatically, and also where a describtion of the test can be written
 def meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df):
     if t_horizontal==0:
         input_var="y"
@@ -142,7 +144,7 @@ def meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribt
 
 
         
-
+#For after the test is done to do the rating and for any notes observed
 def comment_data():
     no_answer=True
     while no_answer == True:
@@ -174,12 +176,13 @@ def comment_data():
 
     
     return test_result,notes
-#save_meta(t_horizontal,t_vertical,discribtion,test_result,notes):
-def save_meta(test_nb,start_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes):
+
+#saves all the meta data needed
+def save_meta(test_nb,start_t,end_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes):
     today= datetime.today()
     test_name=str(today.year)+str(today.month)+str(today.day)
-    list_of_inf=[[test_nb,test_name,start_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes]]
-    df_of_inf=pd.DataFrame(list_of_inf,columns=['Test_number','Date_y_m_d','Start_time_[unix_ms]','Sample_rate_weld[Hz]','Sample_rate_sound[Hz]','Rating','Path_sound','Path_weld','Path_video','Thickness_hor[mm]','Thickness_ver[mm]','Current[A*10]','Voltage[V*10]','Wire_feed[m/min]','Gas_flow[L/min]','Describtion','Notes'])
+    list_of_inf=[[test_nb,test_name,start_t,end_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes]]
+    df_of_inf=pd.DataFrame(list_of_inf,columns=['Test_number','Date_y_m_d','Start_time_[unix_ms]','End_time_[unix_ms]','Sample_rate_weld[Hz]','Sample_rate_sound[Hz]','Rating','Path_sound','Path_weld','Path_video','Thickness_hor[mm]','Thickness_ver[mm]','Current[A*10]','Voltage[V*10]','Wire_feed[m/min]','Gas_flow[L/min]','Describtion','Notes'])
     
 
     data_dir="Data/"
@@ -204,10 +207,8 @@ def save_meta(test_nb,start_t,sample_rate_weld,sample_rate_sound,test_result,pat
     df.to_csv("Data/meta/meta.csv",index=False)
     return df_of_inf
 
-#MetafileIndhold(Typetest=T-joint, Størrelse=10mm, Dato=Day/month, Nummer=1, Link til dataen)
-#DataNavn(Dato=Day/Month, Nummer=1)
-#DataIndhold(time, Current, Voltage, WireFeeder, Velosity, Sound)
 
+#function that controls communication with the robot and starts and stops any recordings
 def data_exchange_with_cowelder():
     PORT = 50000
     SAMPLERATE = 10
@@ -333,4 +334,4 @@ if __name__ == '__main__':
     cur_dir = os.getcwd()
     number=len(os.listdir(cur_dir+"/Data/cam"))+1
 
-    df_last_settings=save_meta(number,unix_time_start,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
+    df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
