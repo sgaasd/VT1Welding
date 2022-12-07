@@ -87,7 +87,7 @@ print(df_meta)
 print(df_meta.iat[0,0])
 
 dash.register_page(__name__,path='/')
-
+##Layout for the live page that updates whenever there is new data
 layout=([
 
     dcc.Interval(id='update_interval', disabled=False, interval=1*1000, n_intervals=0),

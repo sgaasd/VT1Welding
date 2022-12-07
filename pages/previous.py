@@ -86,7 +86,7 @@ margin=dict(l=20, r=20, t=25, b=20)
 dropdown=dcc.Dropdown(openfiles.col_to_list(df_meta,'Test_number'),1,id='test_dropdown',style={'background-color': '#343434', 'border-radius': '0px'})
 
 dash.register_page(__name__)
-
+#Layout for page for looking at previous data
 layout=([
 
     dcc.Interval(id='update_dropdown', disabled=False, interval=1*1000, n_intervals=0),

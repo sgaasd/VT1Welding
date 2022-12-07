@@ -4,27 +4,8 @@ import os
 import numpy as np
 import open3d
 
-def list_range(start, end, step):
-    lst=[start]
-    for i in range(1,end):
-        start=start+step
-        lst.append(start)
-    return lst
 
-
-#def new_measure_check(previous):
-#    data_dir="Data/"
-#    data_type=["cam/","info/","scan/","sound/","weld/"]
-#
-#    weld_dir=os.listdir(data_dir+data_type[4])
-#
-#    now=len(weld_dir)
-#    if now != previous:
-#        return True, now
-#    else:
-#        return False, now
-
-
+#used for updating a dataframe 
 def updata_df(i):
     Hz=10
     data_dir="Data/"
@@ -37,20 +18,7 @@ def updata_df(i):
     return df
 
 
-
-
-def open_scan():
-    data_dir="Data/"
-    data_type=["cam/","info/","scan/","sound/","weld/"]
-    cur_dir=os.listdir(data_dir+data_type[2])
-    pc_cur = open3d.io.read_point_cloud(data_dir+data_type[2]+cur_dir[len(cur_dir)-1])
-    xyz_pc= np.asarray(pc_cur.points)
-    print(xyz_pc)
-
-    df=pd.DataFrame(data=xyz_pc, columns=['x','y','z'])
-    print(df)
-    return df
-
+#returns path for the newest video
 def path_of_vid():
     data_dir="Data/"
     data_type=["cam/","info/","scan/","sound/","weld/"]
@@ -58,6 +26,7 @@ def path_of_vid():
     path="/"+data_dir+data_type[2]+cur_dir[len(cur_dir)-1]
     return path
 
+#function used for calculating the utilization rate based on unix time
 def uptime():
     data_dir="Data/"
     data_type=["cam/","info/","scan/","sound/","weld/"]
@@ -85,14 +54,16 @@ def uptime():
     print(str(round(util,2))+'%')
     return (str(round(util,2)) + '%')
 
+#converts a dataframe column to a list 
 def col_to_list(df,name):
     return df[name].tolist()
 
-
+#Opens csv as dataframe based on the path
 def df_from_path(path_list,value):
     df = pd.read_csv(path_list[value], sep=",")
     return df
 
+#check for new data
 def new_measure_check(previous,list_to_check):
 
 
