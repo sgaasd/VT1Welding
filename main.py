@@ -44,11 +44,13 @@ def tocontinue():
 
 
 current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=0,0,0,0,0,0,0
-def meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion):
+df_last_setting=0
+def meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df):
     if t_horizontal==0:
         input_var="y"
     else:
-        input_var=input("Is this a new test \"y\" or \"n\":")
+        print(df)
+        input_var=input("Do you want to change any of the current settings \"y\" or \"n\":")
     if input_var =="y":
         print("\n")
         #current
@@ -191,9 +193,13 @@ def save_meta(test_nb,start_t,sample_rate_weld,sample_rate_sound,test_result,pat
     data_type=["cam/","meta/","scan/","sound/","weld/"]
 
     cur_dir=os.listdir(data_dir+data_type[1])
+    ##might have to be commentet out first time
+    df = pd.read_csv("Data/meta/meta.csv", sep=",")
 
-    df = pd.read_csv(data_dir+data_type[1]+cur_dir[len(cur_dir)-1], sep=",")
+    df_param=pd.read_csv("Data/meta/semi_constant_param.csv",sep=',')
+    df_of_inf = pd.concat([df_of_inf, df_param], ignore_index=True, sort=False)
 
+    #this also has to be commentet out
     df = df.append(df_of_inf, ignore_index = True)
     print("saving data")
     
@@ -203,6 +209,7 @@ def save_meta(test_nb,start_t,sample_rate_weld,sample_rate_sound,test_result,pat
     test_name=str(test_name)+"_"+str(test_result)+"_meta_"+str(number)+".csv"
     print(test_name)
     df.to_csv("Data/meta/meta.csv",index=False)
+    return df_of_inf
 
 #MetafileIndhold(Typetest=T-joint, Størrelse=10mm, Dato=Day/month, Nummer=1, Link til dataen)
 #DataNavn(Dato=Day/Month, Nummer=1)
@@ -326,9 +333,9 @@ def main():
 
 if __name__ == '__main__':
     #main()
-    current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion)
+    current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df_last_setting)
     test_result,notes=comment_data()
     cur_dir = os.getcwd()
     number=len(os.listdir(cur_dir+"/Data/cam"))+1
 
-    save_meta(number,unix_time,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
+    df_last_settings=save_meta(number,unix_time,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)

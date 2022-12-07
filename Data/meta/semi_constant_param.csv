@@ -1,0 +1,2 @@
+Material,Gas_type,Electrode,Travel_speed[m/min],Electrode_d[mm],Wire_stictout[mm],Gun_angle
+St45-2,Ar_CO2_82/18,SG2-SG3_ER70S6,0.42,1.2,18,45
