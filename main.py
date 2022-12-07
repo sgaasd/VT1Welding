@@ -148,18 +148,14 @@ def meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribt
 def comment_data():
     no_answer=True
     while no_answer == True:
-        input_var=input("Did the weld pass as a class c weldment\"y\" or \"n\":")
-        if input_var =="y":
-            print("\n")
-            test_result=1
+        input_var=input("Rate the weld if 1 it passed if 2 gas error if 3 position: ")
+        try:
+            test_result = int(input_var)
+
+            print(test_result)
             no_answer=False
-        elif input_var =="n":
-            print("\n")
-            test_result=0
-            no_answer=False
-        else:
-            print("\n")
-            print("You have to choose yes or no by typing \"y\" or \"n\" \n")
+        except ValueError:
+            print('The provided value is not an float try again')
 
     no_answer=True
     while no_answer == True:
