@@ -188,9 +188,9 @@ def save_meta(test_nb,start_t,end_t,sample_rate_weld,sample_rate_sound,test_resu
     ##might have to be commentet out first time
     df = pd.read_csv("Data/meta/meta.csv", sep=",")
 
-    df_param=pd.read_csv("Data/meta/semi_constant_param.csv",sep=',')
-    df_of_inf = pd.concat([df_of_inf, df_param], ignore_index=True, sort=False)
-
+    df_param=pd.read_csv("Data/meta/00_semi_constant_param.csv",sep=',')
+    df_of_inf = pd.concat([df_of_inf, df_param], ignore_index=True,axis=1, join='inner')
+    df_of_inf.columns = ['Test_number','Date_y_m_d','Start_time_[unix_ms]','End_time_[unix_ms]','Sample_rate_weld[Hz]','Sample_rate_sound[Hz]','Rating','Path_sound','Path_weld','Path_video','Thickness_hor[mm]','Thickness_ver[mm]','Current[A*10]','Voltage[V*10]','Wire_feed[m/min]','Gas_flow[L/min]','Describtion','Notes','Material','Gas_type','Electrode','Travel_speed[m/min]','Electrode_d[mm]','Wire_stictout[mm]','Gun_angle']
     #this also has to be commentet out
     df = df.append(df_of_inf, ignore_index = True)
     print("saving data")
@@ -200,12 +200,16 @@ def save_meta(test_nb,start_t,end_t,sample_rate_weld,sample_rate_sound,test_resu
     number=f"{number:03d}"
     test_name=str(test_name)+"_"+str(test_result)+"_meta_"+str(number)+".csv"
     print(test_name)
+    #df_of_inf.to_csv("Data/meta/meta.csv",index=False)
+    ###uncomment
     df.to_csv("Data/meta/meta.csv",index=False)
     return df_of_inf
 
 
 #function that controls communication with the robot and starts and stops any recordings
 def data_exchange_with_cowelder():
+    current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=0,0,0,0,0,0,0
+    df_last_setting=0
     PORT = 50000
     SAMPLERATE = 10
     ur10_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -240,9 +244,9 @@ def data_exchange_with_cowelder():
             #ret, frame = cap.read()
 #        cv.waitKey(1)start
 #        cv.imshow('frame', frame)
-
+        current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df_last_setting)
         initiate_go_signal = input("Type 'start' to initiate program: ")
-        welding_data_list = ["Current, Voltage, Wire-feed"]
+        welding_data_list = ["Current, Voltage, Wire-feed, Gas-flow"] ###SKAL DETTE ÆNDRES????
         if initiate_go_signal == "start": #Start til før svejsning
             while initiate_weld_signal == "NULL":
                 connection.send((bytes('(1)', 'ascii'))) #Sender signal til roboten om den skal starte
@@ -259,10 +263,10 @@ def data_exchange_with_cowelder():
             unix_time_start=time.mktime(unix_time_start.timetuple()) + unix_time_start.microsecond/1e3
 
             while weldment_done == False: 
-                print("while loop")
+                #print("while loop")
                 connection.send((bytes('(2)', 'ascii')))
                 recieved_data = connection.recv(1024)
-                print(recieved_data)
+                #print(recieved_data)
                 ret, frame = cap.read()
 #                cv.waitKey(1)
 #                cv.imshow('frame', frame)
@@ -276,7 +280,7 @@ def data_exchange_with_cowelder():
                 else:
                     #welding_data_list.append(recieved_data.decode("utf-8"))
                     welding_data_list.append(recieved_data.decode("utf-8"))
-                    print("welding data saved")
+                    #print("welding data saved")
             welding_tip_in_position = False        
             initiate_weld_signal = "NULL"
             #print(welding_data_list)
@@ -286,7 +290,7 @@ def data_exchange_with_cowelder():
             new_header = welding_data_dataframe.iloc[0] #grab the first row for the headery
             welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
             welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
-            Hz_weld=100
+            Hz_weld=500
             lst=np.linspace(unix_time_start,unix_time_end,len(welding_data_dataframe.index))
             welding_data_dataframe['time [s]']=lst
 
@@ -304,9 +308,10 @@ def data_exchange_with_cowelder():
             cols = cols[-1:] + cols[:-1]
             mic_df = mic_df[cols]
             out.release()
-
-            path_weld=save_data(test_type="weld", data=welding_data_dataframe, rating=1)
-            path_sound=save_data(test_type="sound", data=mic_df, rating=1)
+            test_result,notes=comment_data()
+            path_weld=save_data("weld", data=welding_data_dataframe, rating=test_result)
+            path_sound=save_data("sound", data=mic_df, rating=test_result)
+            df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
             weldment_done = False
 
         if input("Continue to weld another piece press 'y' | shutdown press 'n': ") == "n":
@@ -325,10 +330,10 @@ def main():
 
 
 if __name__ == '__main__':
-    #main()
-    current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df_last_setting)
-    test_result,notes=comment_data()
-    cur_dir = os.getcwd()
-    number=len(os.listdir(cur_dir+"/Data/cam"))+1
+    main()
+    #current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df_last_setting)
+    #test_result,notes=comment_data()
+    #cur_dir = os.getcwd()
+    #number=len(os.listdir(cur_dir+"/Data/cam"))+1
 
-    df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
+    #df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
