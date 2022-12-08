@@ -18,6 +18,7 @@ past_len=0
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
 df_meta=openfiles.updata_df(1)
+#df_meta=df_meta.iloc[0]
 
 #df=openfiles.updata_df(4)
 df=openfiles.df_from_path(openfiles.col_to_list(df_meta,'Path_weld'),-1)
@@ -122,7 +123,7 @@ layout=([
                                
                                ,width=3)])
                                ]),
-            html.Div([
+            html.Div(id='meta_dat2',children=[
                 dbc.Row([dbc.Col([
                     dbc.Row([
                         dbc.Col(html.Div(['Thickness bottom plate [mm]: ']), width=8),

@@ -120,34 +120,34 @@ layout=([
                                'margin-bottom':'0px',
                                'font-size': '25px'})]),
             html.Div([
-                dbc.Row([dbc.Col([
+                dbc.Row(id='meta_dat',children=[dbc.Col([
                     dbc.Row([
                         dbc.Col(html.Div(['Thickness bottom plate [mm]: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[0,9]), width="auto")
+                        dbc.Col(html.Div(df_meta.iat[-1,9]), width="auto")
                     ]),
                     dbc.Row([
                         dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[0,10]), width="auto")
+                        dbc.Col(html.Div(df_meta.iat[-1,10]), width="auto")
                     ]),
                     dbc.Row([
                         dbc.Col(html.Div(['Gas flow [L/min]: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[0,14]), width="auto")
+                        dbc.Col(html.Div(df_meta.iat[-1,14]), width="auto")
                     ]),
                     dbc.Row([
                         dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[0,13]), width="auto")
+                        dbc.Col(html.Div(df_meta.iat[-1,13]), width="auto")
                     ]),
                     dbc.Row([
                         dbc.Col(html.Div(['Input Current [A]: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[0,11]), width="auto")
+                        dbc.Col(html.Div(df_meta.iat[-1,11]), width="auto")
                     ]),
                     dbc.Row([
                         dbc.Col(html.Div(['Input Voltage [V]']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[0,12]), width="auto")
+                        dbc.Col(html.Div(df_meta.iat[-1,12]), width="auto")
                     ]),                
                     dbc.Row([
                         dbc.Col(html.Div(['Pass or fail: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[0,5]), width="auto")
+                        dbc.Col(html.Div(df_meta.iat[-1,5]), width="auto")
                     ])
             ]),             
                 dbc.Col([
@@ -155,7 +155,7 @@ layout=([
                                'margin-top':   '0px',
                                'margin-left':  '0px',
                                'font-size': '20px'}),
-                    html.Div(df_meta.iat[0,15])
+                    html.Div(df_meta.iat[-1,15])
                 
                 ]),
                 dbc.Col([
@@ -163,7 +163,7 @@ layout=([
                                'margin-top':   '0px',
                                'margin-left':  '0px',
                                'font-size': '20px'}),
-                    html.Div(df_meta.iat[0,16])
+                    html.Div(df_meta.iat[-1,16])
                 
                 ])
                 

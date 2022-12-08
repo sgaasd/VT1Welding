@@ -35,7 +35,7 @@ dash.page_container
 
 ])
 
-@app.callback(Output('graph-vol','figure'),Output('graph-cur','figure'),Output('graph-wir','figure'),Output('graph-ch1','figure'),Output('graph-ch2','figure'),Output('graph-ch3','figure'),Output('graph-ch4','figure'),Output('determine_update','data'),Input('update_interval','n_intervals'),Input('determine_update','data'))
+@app.callback(Output('meta_dat', 'children'),Output('graph-vol','figure'),Output('graph-cur','figure'),Output('graph-wir','figure'),Output('graph-ch1','figure'),Output('graph-ch2','figure'),Output('graph-ch3','figure'),Output('graph-ch4','figure'),Output('determine_update','data'),Input('update_interval','n_intervals'),Input('determine_update','data'))
 ##used for updating figures on the live page
 def update_figs_live(n,past_len):
     if n==0:
@@ -104,9 +104,64 @@ def update_figs_live(n,past_len):
         )
 
 
-        return fig_vol,fig_cur,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4,past_len
+        df_meta=openfiles.updata_df(1)
+
+        meta=[
+                dbc.Row([dbc.Col([
+                    dbc.Row([
+                        dbc.Col(html.Div(['Thickness bottom plate [mm]: ']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,9]), width="auto")
+                    ]),
+                    dbc.Row([
+                        dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,10]), width="auto")
+                    ]),
+                    dbc.Row([
+                        dbc.Col(html.Div(['Gas flow [L/min]: ']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,14]), width="auto")
+                    ]),
+                    dbc.Row([
+                        dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,13]), width="auto")
+                    ]),
+                    dbc.Row([
+                        dbc.Col(html.Div(['Input Current [A]: ']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,11]), width="auto")
+                    ]),
+                    dbc.Row([
+                        dbc.Col(html.Div(['Input Voltage [V]']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,12]), width="auto")
+                    ]),                
+                    dbc.Row([
+                        dbc.Col(html.Div(['Pass or fail: ']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,5]), width="auto")
+                    ])
+            ]),             
+                dbc.Col([
+                    html.H1("Description of test: ",style={
+                               'margin-top':   '0px',
+                               'margin-left':  '0px',
+                               'font-size': '20px'}),
+                    html.Div(df_meta.iat[-1,15])
+                
+                ]),
+                dbc.Col([
+                    html.H1("Notes for test: ",style={
+                               'margin-top':   '0px',
+                               'margin-left':  '0px',
+                               'font-size': '20px'}),
+                    html.Div(df_meta.iat[-1,16])
+                
+                ])
+                
+                ])
+
+            
+            ]
+
+        return meta,fig_vol,fig_cur,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4,past_len
     
-    return no_update,no_update,no_update,no_update,no_update,no_update,no_update,past_len
+    return no_update,no_update,no_update,no_update,no_update,no_update,no_update,no_update,past_len
 
 @app.callback(Output('test_dropdown','options'),Output('determine_update_drop','data'),Input('update_dropdown','n_intervals'),Input('determine_update_drop','data'))
 #updates the dropdown menu every time there is new data
@@ -121,7 +176,7 @@ def update_drop_live(n,past_len):
     return no_update,past_len
 
 
-@app.callback(Output('drop_value','data'),Output('graph-vol2','figure'),Output('graph-cur2','figure'),Output('graph-wir2','figure'),Output('graph-ch12','figure'),Output('graph-ch22','figure'),Output('graph-ch32','figure'),Output('graph-ch42','figure'),Input('test_dropdown','value'))
+@app.callback(Output('meta_dat2', 'children'),Output('drop_value','data'),Output('graph-vol2','figure'),Output('graph-cur2','figure'),Output('graph-wir2','figure'),Output('graph-ch12','figure'),Output('graph-ch22','figure'),Output('graph-ch32','figure'),Output('graph-ch42','figure'),Input('test_dropdown','value'))
 #updates the figures based on the option chosen in the dropdown menu
 def update_value(value):
     print(value)
@@ -186,7 +241,62 @@ def update_value(value):
     font_color=colors['text'],
     margin=dict(l=20, r=20, t=25, b=20)
     )
-    return value-1,fig_vol,fig_cur,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4
+
+    df_meta=openfiles.updata_df(1)
+    meta=[
+            dbc.Row([dbc.Col([
+                dbc.Row([
+                    dbc.Col(html.Div(['Thickness bottom plate [mm]: ']), width=8),
+                    dbc.Col(html.Div(df_meta.iat[value-1,9]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=8),
+                    dbc.Col(html.Div(df_meta.iat[value-1,10]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Gas flow [L/min]: ']), width=8),
+                    dbc.Col(html.Div(df_meta.iat[value-1,14]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
+                    dbc.Col(html.Div(df_meta.iat[value-1,13]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Input Current [A]: ']), width=8),
+                    dbc.Col(html.Div(df_meta.iat[value-1,11]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Input Voltage [V]']), width=8),
+                    dbc.Col(html.Div(df_meta.iat[value-1,12]), width="auto")
+                ]),                
+                dbc.Row([
+                    dbc.Col(html.Div(['Pass or fail: ']), width=8),
+                    dbc.Col(html.Div(df_meta.iat[value-1,5]), width="auto")
+                ])
+        ]),             
+            dbc.Col([
+                html.H1("Description of test: ",style={
+                            'margin-top':   '0px',
+                            'margin-left':  '0px',
+                            'font-size': '20px'}),
+                html.Div(df_meta.iat[value-1,15])
+            
+            ]),
+            dbc.Col([
+                html.H1("Notes for test: ",style={
+                            'margin-top':   '0px',
+                            'margin-left':  '0px',
+                            'font-size': '20px'}),
+                html.Div(df_meta.iat[value-1,16])
+            
+            ])
+            
+            ])
+
+        
+        ]
+
+    return meta,value-1,fig_vol,fig_cur,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4
 
 if __name__ == '__main__':
     app.run_server(debug=False)
