@@ -210,6 +210,8 @@ def save_meta(test_nb,start_t,end_t,sample_rate_weld,sample_rate_sound,test_resu
 def data_exchange_with_cowelder():
     current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=0,0,0,0,0,0,0
     df_last_setting=0
+    Hz_sound=16000
+    Hz_weld=500
     PORT = 50000
     SAMPLERATE = 10
     ur10_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -276,7 +278,9 @@ def data_exchange_with_cowelder():
                     connection.send((bytes('(0)', 'ascii')))
                     unix_time_end=datetime.now()
                     unix_time_end=time.mktime(unix_time_end.timetuple())*1e3 + unix_time_end.microsecond/1e3
+                    Micdata=Microphones.stoprec(Micdata)
                     weldment_done = True  
+
                 else:
                     #welding_data_list.append(recieved_data.decode("utf-8"))
                     welding_data_list.append(recieved_data.decode("utf-8"))
@@ -290,19 +294,15 @@ def data_exchange_with_cowelder():
             new_header = welding_data_dataframe.iloc[0] #grab the first row for the headery
             welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
             welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
-            Hz_weld=500
             lst=np.linspace(unix_time_start,unix_time_end,len(welding_data_dataframe.index))
             welding_data_dataframe['time [s]']=lst
 
             cols =  welding_data_dataframe.columns.tolist()
             cols = cols[-1:] + cols[:-1]
             welding_data_dataframe = welding_data_dataframe[cols]
-
-            #print(welding_data_dataframe)
-            Micdata=Microphones.stoprec(Micdata)
             mic_df=pd.DataFrame(Micdata,columns=['Channel_1','Channel_2','Channel_3','Channel_4'])
-            Hz_sound=16000
             lst=np.linspace(unix_time_start,unix_time_end,len(mic_df.index))
+            #print(welding_data_dataframe)
             mic_df['time [s]']=lst
             cols =  mic_df.columns.tolist()
             cols = cols[-1:] + cols[:-1]
