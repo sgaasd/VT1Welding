@@ -35,7 +35,7 @@ dash.page_container
 
 ])
 
-@app.callback(Output('meta_dat', 'children'),Output('graph-vol','figure'),Output('graph-cur','figure'),Output('graph-wir','figure'),Output('graph-ch1','figure'),Output('graph-ch2','figure'),Output('graph-ch3','figure'),Output('graph-ch4','figure'),Output('determine_update','data'),Input('update_interval','n_intervals'),Input('determine_update','data'))
+@app.callback(Output('meta_dat', 'children'),Output('graph-vol','figure'),Output('graph-cur','figure'),Output('graph-gas','figure'),Output('graph-wir','figure'),Output('graph-ch1','figure'),Output('graph-ch2','figure'),Output('graph-ch3','figure'),Output('graph-ch4','figure'),Output('determine_update','data'),Input('update_interval','n_intervals'),Input('determine_update','data'))
 ##used for updating figures on the live page
 def update_figs_live(n,past_len):
     if n==0:
@@ -45,7 +45,7 @@ def update_figs_live(n,past_len):
     if con==True:
         df=openfiles.updata_df(4)
 
-        fig_vol=px.line(df,x="time [s]",y=' Voltage',title='Voltage data')
+        fig_vol=px.line(df,x="time [s]",y=' Voltage',title='Voltage')
         fig_vol.update_layout(
         plot_bgcolor=colors['background'],
         paper_bgcolor=colors['background'],
@@ -53,7 +53,7 @@ def update_figs_live(n,past_len):
         margin=dict(l=20, r=20, t=35, b=20)
         )
 
-        fig_cur=px.line(df,x="time [s]",y="Current",title='Current data')
+        fig_cur=px.line(df,x="time [s]",y="Current",title='Current')
         fig_cur.update_layout(
         plot_bgcolor=colors['background'],
         paper_bgcolor=colors['background'],
@@ -61,7 +61,15 @@ def update_figs_live(n,past_len):
         margin=dict(l=20, r=20, t=35, b=20)
         )
 
-        fig_wir=px.line(df,x="time [s]",y=" Wire-feed",title='Wirer data')
+        fig_gas=px.line(df,x="time [s]",y=" Gas-flow",title='Gas flow')
+        fig_gas.update_layout(
+        plot_bgcolor=colors['background'],
+        paper_bgcolor=colors['background'],
+        font_color=colors['text'],
+        margin=dict(l=20, r=20, t=35, b=20)
+        )
+
+        fig_wir=px.line(df,x="time [s]",y=" Wire-feed",title='Wirer speed')
         fig_wir.update_layout(
         plot_bgcolor=colors['background'],
         paper_bgcolor=colors['background'],
@@ -71,7 +79,7 @@ def update_figs_live(n,past_len):
 
         df=openfiles.updata_df(3)
 
-        fig_ch1=px.line(df,x="time [s]",y="Channel_1",title='Channel 1 data')
+        fig_ch1=px.line(df,x="time [s]",y="Channel_1",title='Channel 1')
         fig_ch1.update_layout(
         plot_bgcolor=colors['background2'],
         paper_bgcolor=colors['background2'],
@@ -79,7 +87,7 @@ def update_figs_live(n,past_len):
         margin=dict(l=20, r=20, t=25, b=20)
         )
 
-        fig_ch2=px.line(df,x="time [s]",y="Channel_2",title='Channel 2 data')
+        fig_ch2=px.line(df,x="time [s]",y="Channel_2",title='Channel 2')
         fig_ch2.update_layout(
         plot_bgcolor=colors['background2'],
         paper_bgcolor=colors['background2'],
@@ -87,7 +95,7 @@ def update_figs_live(n,past_len):
         margin=dict(l=20, r=20, t=25, b=20)
         )
 
-        fig_ch3=px.line(df,x="time [s]",y="Channel_3",title='Channel 3 data')
+        fig_ch3=px.line(df,x="time [s]",y="Channel_3",title='Channel 3')
         fig_ch3.update_layout(
         plot_bgcolor=colors['background2'],
         paper_bgcolor=colors['background2'],
@@ -95,7 +103,7 @@ def update_figs_live(n,past_len):
         margin=dict(l=20, r=20, t=25, b=20)
         )
 
-        fig_ch4=px.line(df,x="time [s]",y="Channel_4",title='Channel 4 data')
+        fig_ch4=px.line(df,x="time [s]",y="Channel_4",title='Channel 4')
         fig_ch4.update_layout(
         plot_bgcolor=colors['background2'],
         paper_bgcolor=colors['background2'],
@@ -110,31 +118,31 @@ def update_figs_live(n,past_len):
                 dbc.Row([dbc.Col([
                     dbc.Row([
                         dbc.Col(html.Div(['Thickness bottom plate [mm]: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[-1,9]), width="auto")
-                    ]),
-                    dbc.Row([
-                        dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[-1,10]), width="auto")
                     ]),
                     dbc.Row([
-                        dbc.Col(html.Div(['Gas flow [L/min]: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[-1,14]), width="auto")
-                    ]),
-                    dbc.Row([
-                        dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[-1,13]), width="auto")
-                    ]),
-                    dbc.Row([
-                        dbc.Col(html.Div(['Input Current [A]: ']), width=8),
+                        dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[-1,11]), width="auto")
                     ]),
                     dbc.Row([
-                        dbc.Col(html.Div(['Input Voltage [V]']), width=8),
+                        dbc.Col(html.Div(['Gas flow [L/min]: ']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,15]), width="auto")
+                    ]),
+                    dbc.Row([
+                        dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,14]), width="auto")
+                    ]),
+                    dbc.Row([
+                        dbc.Col(html.Div(['Input Current [A]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[-1,12]), width="auto")
+                    ]),
+                    dbc.Row([
+                        dbc.Col(html.Div(['Input Voltage [V]']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,13]), width="auto")
                     ]),                
                     dbc.Row([
                         dbc.Col(html.Div(['Pass or fail: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[-1,5]), width="auto")
+                        dbc.Col(html.Div(df_meta.iat[-1,6]), width="auto")
                     ])
             ]),             
                 dbc.Col([
@@ -142,7 +150,7 @@ def update_figs_live(n,past_len):
                                'margin-top':   '0px',
                                'margin-left':  '0px',
                                'font-size': '20px'}),
-                    html.Div(df_meta.iat[-1,15])
+                    html.Div(df_meta.iat[-1,16])
                 
                 ]),
                 dbc.Col([
@@ -150,7 +158,7 @@ def update_figs_live(n,past_len):
                                'margin-top':   '0px',
                                'margin-left':  '0px',
                                'font-size': '20px'}),
-                    html.Div(df_meta.iat[-1,16])
+                    html.Div(df_meta.iat[-1,17])
                 
                 ])
                 
@@ -159,7 +167,7 @@ def update_figs_live(n,past_len):
             
             ]
 
-        return meta,fig_vol,fig_cur,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4,past_len
+        return meta,fig_vol,fig_cur,fig_gas,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4,past_len
     
     return no_update,no_update,no_update,no_update,no_update,no_update,no_update,no_update,past_len
 
@@ -176,7 +184,7 @@ def update_drop_live(n,past_len):
     return no_update,past_len
 
 
-@app.callback(Output('meta_dat2', 'children'),Output('drop_value','data'),Output('graph-vol2','figure'),Output('graph-cur2','figure'),Output('graph-wir2','figure'),Output('graph-ch12','figure'),Output('graph-ch22','figure'),Output('graph-ch32','figure'),Output('graph-ch42','figure'),Input('test_dropdown','value'))
+@app.callback(Output('meta_dat2', 'children'),Output('drop_value','data'),Output('graph-vol2','figure'),Output('graph-cur2','figure'),Output('graph-gas2','figure'),Output('graph-wir2','figure'),Output('graph-ch12','figure'),Output('graph-ch22','figure'),Output('graph-ch32','figure'),Output('graph-ch42','figure'),Input('test_dropdown','value'))
 #updates the figures based on the option chosen in the dropdown menu
 def update_value(value):
     print(value)
@@ -184,7 +192,7 @@ def update_value(value):
 
     df=openfiles.df_from_path(openfiles.col_to_list(df_meta,'Path_weld'),value-1)
 
-    fig_vol=px.line(df,x="time [s]",y=' Voltage',title='Voltage data')
+    fig_vol=px.line(df,x="time [s]",y=' Voltage',title='Voltage')
     fig_vol.update_layout(
     plot_bgcolor=colors['background'],
     paper_bgcolor=colors['background'],
@@ -192,15 +200,22 @@ def update_value(value):
     margin=dict(l=20, r=20, t=35, b=20)
     )
 
-    fig_cur=px.line(df,x="time [s]",y="Current",title='Current data')
+    fig_cur=px.line(df,x="time [s]",y="Current",title='Current')
     fig_cur.update_layout(
     plot_bgcolor=colors['background'],
     paper_bgcolor=colors['background'],
     font_color=colors['text'],
     margin=dict(l=20, r=20, t=35, b=20)
     )
+    fig_gas=px.line(df,x="time [s]",y=" Gas-flow",title='Gas flow')
+    fig_gas.update_layout(
+    plot_bgcolor=colors['background'],
+    paper_bgcolor=colors['background'],
+    font_color=colors['text'],
+    margin=dict(l=20, r=20, t=35, b=20)
+    )
 
-    fig_wir=px.line(df,x="time [s]",y=" Wire-feed",title='Wirer data')
+    fig_wir=px.line(df,x="time [s]",y=" Wire-feed",title='Wirer speed')
     fig_wir.update_layout(
     plot_bgcolor=colors['background'],
     paper_bgcolor=colors['background'],
@@ -210,7 +225,7 @@ def update_value(value):
 
     df=openfiles.df_from_path(openfiles.col_to_list(df_meta,'Path_sound'),value-1)
 
-    fig_ch1=px.line(df,x="time [s]",y="Channel_1",title='Channel 1 data')
+    fig_ch1=px.line(df,x="time [s]",y="Channel_1",title='Channel 1')
     fig_ch1.update_layout(
     plot_bgcolor=colors['background2'],
     paper_bgcolor=colors['background2'],
@@ -218,7 +233,7 @@ def update_value(value):
     margin=dict(l=20, r=20, t=25, b=20)
     )
 
-    fig_ch2=px.line(df,x="time [s]",y="Channel_2",title='Channel 2 data')
+    fig_ch2=px.line(df,x="time [s]",y="Channel_2",title='Channel 2')
     fig_ch2.update_layout(
     plot_bgcolor=colors['background2'],
     paper_bgcolor=colors['background2'],
@@ -226,7 +241,7 @@ def update_value(value):
     margin=dict(l=20, r=20, t=25, b=20)
     )
 
-    fig_ch3=px.line(df,x="time [s]",y="Channel_3",title='Channel 3 data')
+    fig_ch3=px.line(df,x="time [s]",y="Channel_3",title='Channel 3')
     fig_ch3.update_layout(
     plot_bgcolor=colors['background2'],
     paper_bgcolor=colors['background2'],
@@ -234,7 +249,7 @@ def update_value(value):
     margin=dict(l=20, r=20, t=25, b=20)
     )
 
-    fig_ch4=px.line(df,x="time [s]",y="Channel_4",title='Channel 4 data')
+    fig_ch4=px.line(df,x="time [s]",y="Channel_4",title='Channel 4')
     fig_ch4.update_layout(
     plot_bgcolor=colors['background2'],
     paper_bgcolor=colors['background2'],
@@ -247,31 +262,31 @@ def update_value(value):
             dbc.Row([dbc.Col([
                 dbc.Row([
                     dbc.Col(html.Div(['Thickness bottom plate [mm]: ']), width=8),
-                    dbc.Col(html.Div(df_meta.iat[value-1,9]), width="auto")
-                ]),
-                dbc.Row([
-                    dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=8),
                     dbc.Col(html.Div(df_meta.iat[value-1,10]), width="auto")
                 ]),
                 dbc.Row([
-                    dbc.Col(html.Div(['Gas flow [L/min]: ']), width=8),
-                    dbc.Col(html.Div(df_meta.iat[value-1,14]), width="auto")
-                ]),
-                dbc.Row([
-                    dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
-                    dbc.Col(html.Div(df_meta.iat[value-1,13]), width="auto")
-                ]),
-                dbc.Row([
-                    dbc.Col(html.Div(['Input Current [A]: ']), width=8),
+                    dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=8),
                     dbc.Col(html.Div(df_meta.iat[value-1,11]), width="auto")
                 ]),
                 dbc.Row([
-                    dbc.Col(html.Div(['Input Voltage [V]']), width=8),
+                    dbc.Col(html.Div(['Gas flow [L/min]: ']), width=8),
+                    dbc.Col(html.Div(df_meta.iat[value-1,15]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
+                    dbc.Col(html.Div(df_meta.iat[value-1,14]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Input Current [A]: ']), width=8),
                     dbc.Col(html.Div(df_meta.iat[value-1,12]), width="auto")
+                ]),
+                dbc.Row([
+                    dbc.Col(html.Div(['Input Voltage [V]']), width=8),
+                    dbc.Col(html.Div(df_meta.iat[value-1,13]), width="auto")
                 ]),                
                 dbc.Row([
                     dbc.Col(html.Div(['Pass or fail: ']), width=8),
-                    dbc.Col(html.Div(df_meta.iat[value-1,5]), width="auto")
+                    dbc.Col(html.Div(df_meta.iat[value-1,6]), width="auto")
                 ])
         ]),             
             dbc.Col([
@@ -279,7 +294,7 @@ def update_value(value):
                             'margin-top':   '0px',
                             'margin-left':  '0px',
                             'font-size': '20px'}),
-                html.Div(df_meta.iat[value-1,15])
+                html.Div(df_meta.iat[value-1,16])
             
             ]),
             dbc.Col([
@@ -287,7 +302,7 @@ def update_value(value):
                             'margin-top':   '0px',
                             'margin-left':  '0px',
                             'font-size': '20px'}),
-                html.Div(df_meta.iat[value-1,16])
+                html.Div(df_meta.iat[value-1,17])
             
             ])
             
@@ -296,7 +311,7 @@ def update_value(value):
         
         ]
 
-    return meta,value-1,fig_vol,fig_cur,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4
+    return meta,value-1,fig_vol,fig_cur,fig_gas,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4
 
 if __name__ == '__main__':
     app.run_server(debug=False)

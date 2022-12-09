@@ -260,7 +260,7 @@ def data_exchange_with_cowelder():
             Micdata=Microphones.CallMic(60,16000)
             connection.send((bytes('(2)', 'ascii')))
             unix_time_start=datetime.now()
-            unix_time_start=time.mktime(unix_time_start.timetuple()) + unix_time_start.microsecond/1e3
+            unix_time_start=time.mktime(unix_time_start.timetuple())*1e3 + unix_time_start.microsecond/1e3
 
             while weldment_done == False: 
                 #print("while loop")
@@ -275,7 +275,7 @@ def data_exchange_with_cowelder():
                 if recieved_data == int.to_bytes(4,4,'big'):
                     connection.send((bytes('(0)', 'ascii')))
                     unix_time_end=datetime.now()
-                    unix_time_end=time.mktime(unix_time_end.timetuple()) + unix_time_end.microsecond/1e3
+                    unix_time_end=time.mktime(unix_time_end.timetuple())*1e3 + unix_time_end.microsecond/1e3
                     weldment_done = True  
                 else:
                     #welding_data_list.append(recieved_data.decode("utf-8"))

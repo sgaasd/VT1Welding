@@ -22,7 +22,7 @@ colors = {
 past_len=0
 df=openfiles.updata_df(4)
 
-fig_vol=px.line(df,x="time [s]",y=' Voltage',title='Voltage data')
+fig_vol=px.line(df,x="time [s]",y=' Voltage',title='Voltage')
 fig_vol.update_layout(
 plot_bgcolor=colors['background'],
 paper_bgcolor=colors['background'],
@@ -30,15 +30,22 @@ font_color=colors['text'],
 margin=dict(l=20, r=20, t=35, b=20)
 )
 
-fig_cur=px.line(df,x="time [s]",y="Current",title='Current data')
+fig_cur=px.line(df,x="time [s]",y="Current",title='Current')
 fig_cur.update_layout(
 plot_bgcolor=colors['background'],
 paper_bgcolor=colors['background'],
 font_color=colors['text'],
 margin=dict(l=20, r=20, t=35, b=20)
 )
+fig_gas=px.line(df,x="time [s]",y=" Gas-flow",title='Gas flow')
+fig_gas.update_layout(
+plot_bgcolor=colors['background'],
+paper_bgcolor=colors['background'],
+font_color=colors['text'],
+margin=dict(l=20, r=20, t=35, b=20)
+)
 
-fig_wir=px.line(df,x="time [s]",y=" Wire-feed",title='Wirer data')
+fig_wir=px.line(df,x="time [s]",y=" Wire-feed",title='Wirer speed')
 fig_wir.update_layout(
 plot_bgcolor=colors['background'],
 paper_bgcolor=colors['background'],
@@ -48,7 +55,7 @@ margin=dict(l=20, r=20, t=35, b=20)
 
 df=openfiles.updata_df(3)
 
-fig_ch1=px.line(df,x="time [s]",y="Channel_1",title='Channel 1 data')
+fig_ch1=px.line(df,x="time [s]",y="Channel_1",title='Channel 1')
 fig_ch1.update_layout(
 plot_bgcolor=colors['background2'],
 paper_bgcolor=colors['background2'],
@@ -56,7 +63,7 @@ font_color=colors['text'],
 margin=dict(l=20, r=20, t=25, b=20)
 )
 
-fig_ch2=px.line(df,x="time [s]",y="Channel_2",title='Channel 2 data')
+fig_ch2=px.line(df,x="time [s]",y="Channel_2",title='Channel 2')
 fig_ch2.update_layout(
 plot_bgcolor=colors['background2'],
 paper_bgcolor=colors['background2'],
@@ -64,7 +71,7 @@ font_color=colors['text'],
 margin=dict(l=20, r=20, t=25, b=20)
 )
 
-fig_ch3=px.line(df,x="time [s]",y="Channel_3",title='Channel 3 data')
+fig_ch3=px.line(df,x="time [s]",y="Channel_3",title='Channel 3')
 fig_ch3.update_layout(
 plot_bgcolor=colors['background2'],
 paper_bgcolor=colors['background2'],
@@ -72,7 +79,7 @@ font_color=colors['text'],
 margin=dict(l=20, r=20, t=25, b=20)
 )
 
-fig_ch4=px.line(df,x="time [s]",y="Channel_4",title='Channel 4 data')
+fig_ch4=px.line(df,x="time [s]",y="Channel_4",title='Channel 4')
 fig_ch4.update_layout(
 plot_bgcolor=colors['background2'],
 paper_bgcolor=colors['background2'],
@@ -103,8 +110,8 @@ layout=([
     figure=fig_cur,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
     html.Hr(style={'width': '95%'}),
     dcc.Graph(
-    id='graph-cur',
-    figure=fig_cur,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
+    id='graph-gas',
+    figure=fig_gas,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
     html.Hr(style={'width': '95%'}),
     dcc.Graph(
     id='graph-wir',
@@ -123,31 +130,31 @@ layout=([
                 dbc.Row(id='meta_dat',children=[dbc.Col([
                     dbc.Row([
                         dbc.Col(html.Div(['Thickness bottom plate [mm]: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[-1,9]), width="auto")
-                    ]),
-                    dbc.Row([
-                        dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[-1,10]), width="auto")
                     ]),
                     dbc.Row([
-                        dbc.Col(html.Div(['Gas flow [L/min]: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[-1,14]), width="auto")
-                    ]),
-                    dbc.Row([
-                        dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[-1,13]), width="auto")
-                    ]),
-                    dbc.Row([
-                        dbc.Col(html.Div(['Input Current [A]: ']), width=8),
+                        dbc.Col(html.Div(['Thickness vertical plate [mm]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[-1,11]), width="auto")
                     ]),
                     dbc.Row([
-                        dbc.Col(html.Div(['Input Voltage [V]']), width=8),
+                        dbc.Col(html.Div(['Gas flow [L/min]: ']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,15]), width="auto")
+                    ]),
+                    dbc.Row([
+                        dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,14]), width="auto")
+                    ]),
+                    dbc.Row([
+                        dbc.Col(html.Div(['Input Current [A]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[-1,12]), width="auto")
+                    ]),
+                    dbc.Row([
+                        dbc.Col(html.Div(['Input Voltage [V]']), width=8),
+                        dbc.Col(html.Div(df_meta.iat[-1,13]), width="auto")
                     ]),                
                     dbc.Row([
                         dbc.Col(html.Div(['Pass or fail: ']), width=8),
-                        dbc.Col(html.Div(df_meta.iat[-1,5]), width="auto")
+                        dbc.Col(html.Div(df_meta.iat[-1,6]), width="auto")
                     ])
             ]),             
                 dbc.Col([
@@ -155,7 +162,7 @@ layout=([
                                'margin-top':   '0px',
                                'margin-left':  '0px',
                                'font-size': '20px'}),
-                    html.Div(df_meta.iat[-1,15])
+                    html.Div(df_meta.iat[-1,16])
                 
                 ]),
                 dbc.Col([
@@ -163,7 +170,7 @@ layout=([
                                'margin-top':   '0px',
                                'margin-left':  '0px',
                                'font-size': '20px'}),
-                    html.Div(df_meta.iat[-1,16])
+                    html.Div(df_meta.iat[-1,17])
                 
                 ])
                 
