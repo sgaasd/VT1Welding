@@ -30,12 +30,12 @@ def path_of_vid():
 def uptime():
     data_dir="Data/"
     data_type=["cam/","info/","scan/","sound/","weld/"]
-    cur_dir=os.listdir(data_dir+data_type[3])
+    cur_dir=os.listdir(data_dir+data_type[4])
     minlist=[]
     maxlist=[]
     timelist=[]
     for i in cur_dir:
-        path=data_dir+data_type[3]+i
+        path=data_dir+data_type[4]+i
         df = pd.read_csv(path, sep=',')
         min=df.iat[0,0]
         max=df.iat[-1,0]
@@ -59,6 +59,11 @@ def uptime():
     print("timelist")
     print(timelist)
 
+    print("total time testing [s]")
+    print(totaltime/1000)
+    print("Total time welding [s]")
+    print(sum(timelist)/1000)
+    print('Resulting util rate:')
     print(str(round(util,2))+'%')
     return (str(round(util,2)) + '%')
 
