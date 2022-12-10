@@ -248,7 +248,7 @@ def data_exchange_with_cowelder():
 #        cv.imshow('frame', frame)
         current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df_last_setting)
         initiate_go_signal = input("Type 'start' to initiate program: ")
-        welding_data_list = ["Current, Voltage, Wire-feed, Gas-flow"] ###SKAL DETTE ÆNDRES????
+        welding_data_list = ["Current[A],Voltage[V],Wire-feed[m/min],Gas-flow[L/min]"] ###SKAL DETTE ÆNDRES????
         if initiate_go_signal == "start": #Start til før svejsning
             while initiate_weld_signal == "NULL":
                 connection.send((bytes('(1)', 'ascii'))) #Sender signal til roboten om den skal starte
