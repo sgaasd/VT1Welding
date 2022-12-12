@@ -35,14 +35,17 @@ dash.page_container
 
 ])
 
-@app.callback(Output('meta_dat', 'children'),Output('graph-vol','figure'),Output('graph-cur','figure'),Output('graph-gas','figure'),Output('graph-wir','figure'),Output('graph-ch1','figure'),Output('graph-ch2','figure'),Output('graph-ch3','figure'),Output('graph-ch4','figure'),Output('determine_update','data'),Input('update_interval','n_intervals'),Input('determine_update','data'))
+@app.callback(Output('left_menu', 'children'),Output('meta_dat', 'children'),Output('bottem_right_menu', 'children'),Output('determine_update','data'),Input('update_interval','n_intervals'),Input('determine_update','data'))
 ##used for updating figures on the live page
 def update_figs_live(n,past_len):
+    df_meta=openfiles.updata_df(1)
+    con,past_len=openfiles.new_measure_check(past_len,openfiles.col_to_list(df_meta,'Path_weld'))    
+    print("test")
     if n==0:
         past_len=0
-    df_meta=openfiles.updata_df(1)
-    con,past_len=openfiles.new_measure_check(past_len,openfiles.col_to_list(df_meta,'Path_weld'))
+        con=True
     if con==True:
+        print ('this is running')
         df=openfiles.updata_df(4)
 
         fig_vol=px.line(df,x="time [s]",y=' Voltage',                 
@@ -142,7 +145,44 @@ def update_figs_live(n,past_len):
         font_color=colors['text'],
         margin=dict(l=20, r=20, t=25, b=20)
         )
+        
+        left_content=[
+        html.H1('Data Visualisation of Robotic Welding',style={'margin-top':   '5px','margin-left':  '10px'}),
+        #html.Hr(style={'width': '95%'}),
+        dcc.Graph(
+        id='graph-vol',
+        figure=fig_vol,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
+        html.Hr(style={'width': '95%'}),
+        dcc.Graph(
+        id='graph-cur',
+        figure=fig_cur,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
+        html.Hr(style={'width': '95%'}),
+        dcc.Graph(
+        id='graph-gas',
+        figure=fig_gas,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
+        html.Hr(style={'width': '95%'}),
+        dcc.Graph(
+        id='graph-wir',
+        figure=fig_wir,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'})]
 
+        bottom_right_content=[html.H3(' Microphone data'),
+            dcc.Graph(
+                id='graph-ch1',
+                figure=fig_ch1,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem',}
+            ),
+            dcc.Graph(
+                id='graph-ch2',
+                figure=fig_ch2,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+            ),
+            dcc.Graph(
+                id='graph-ch3',
+                figure=fig_ch3,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+            ),
+            dcc.Graph(
+                id='graph-ch4',
+                figure=fig_ch4,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+            )
+        ]
 
         df_meta=openfiles.updata_df(1)
 
@@ -199,9 +239,12 @@ def update_figs_live(n,past_len):
             
             ]
 
-        return meta,fig_vol,fig_cur,fig_gas,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4,past_len
-    
-    return no_update,no_update,no_update,no_update,no_update,no_update,no_update,no_update,past_len
+        
+
+        return left_content,meta,bottom_right_content,past_len
+    else:
+        return no_update,no_update,no_update, no_update ##be sure this works with new data added!!!
+        #dash.exceptions.PreventUpdate
 
 @app.callback(Output('test_dropdown','options'),Output('determine_update_drop','data'),Input('update_dropdown','n_intervals'),Input('determine_update_drop','data'))
 #updates the dropdown menu every time there is new data
