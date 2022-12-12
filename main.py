@@ -220,6 +220,9 @@ def data_exchange_with_cowelder():
     connection, address = ur10_socket.accept()
     print(connection)
     print(address)
+    cap = cv.VideoCapture(1)
+    ret = cap.set(cv.CAP_PROP_FRAME_WIDTH,1920)
+    ret = cap.set(cv.CAP_PROP_FRAME_HEIGHT,1080)
 
     close_socket = False
     initiate_weld_signal = "NULL"
@@ -231,15 +234,12 @@ def data_exchange_with_cowelder():
 
     while close_socket == False:
         if initiate == True:
-            cap = cv.VideoCapture(1)
             fourcc = cv.VideoWriter_fourcc(*"mp4v")
             today= datetime.today()
             cur_dir = os.getcwd()
             number=len(os.listdir(cur_dir+"/Data/cam"))+1
             test_name=str(today.year)+str(today.month)+str(today.day)
             test_name=str(test_name)+"_cam_"+str(number)+'.mp4'
-            ret = cap.set(cv.CAP_PROP_FRAME_WIDTH,1920)
-            ret = cap.set(cv.CAP_PROP_FRAME_HEIGHT,1080)
             out = cv.VideoWriter('Data/cam/'+test_name, fourcc, 30.0, (1920, 1080))
             path_video='Data/cam/'+test_name
             initiate = False
@@ -322,7 +322,7 @@ def data_exchange_with_cowelder():
             cv.destroyAllWindows()
         else:
             initiate = True
-            cap.release()
+            #cap.release()
 
 
 def main():
