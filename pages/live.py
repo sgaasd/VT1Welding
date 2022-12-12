@@ -27,7 +27,7 @@ dash.register_page(__name__,path='/')
 layout=([
 
     dcc.Interval(id='update_interval', disabled=False, interval=1*10000, n_intervals=0),
-    html.Div(className="left_menu",id="left_menu",children=["temp"]),
+    html.Div(className="left_menu",id="left_menu",children=["fetching data"]),
     html.Div(className="right_content",
     children=[
             html.Div(
@@ -39,12 +39,12 @@ layout=([
                                'margin-bottom':'0px',
                                'font-size': '25px'})]),
             html.Div([
-                dbc.Row(id='meta_dat',children=["temp"])
+                dbc.Row(id='meta_dat',children=["fetching data"])
             ])
             ]
 
         ),
-        html.Div(className="bottem_right_menu",id="bottem_right_menu",children=["temp"]
+        html.Div(className="bottem_right_menu",id="bottem_right_menu",children=["fetching data"]
         )]),
 dcc.Store(id='determine_update')
 ])
