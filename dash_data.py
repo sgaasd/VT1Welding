@@ -306,7 +306,7 @@ def update_value(value):
     labels={
     "time [s]": "Time [ms]",
     " Wire-feed": "Speed [m*10/min]"
-    },title='Wirer speed')
+    },title='Wire speed')
     fig_wir.update_layout(
     plot_bgcolor=colors['background'],
     paper_bgcolor=colors['background'],
