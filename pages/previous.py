@@ -23,7 +23,11 @@ df_meta=openfiles.updata_df(1)
 #df=openfiles.updata_df(4)
 df=openfiles.df_from_path(openfiles.col_to_list(df_meta,'Path_weld'),-1)
 
-fig_vol=px.line(df,x="time [s]",y=' Voltage',title='Voltage')
+fig_vol=px.line(df,x="time [s]",y=' Voltage',
+labels={
+    "time [s]": "Time [ms]",
+    " Voltage": "Voltage [V*10]"
+},title='Voltage')
 fig_vol.update_layout(
 plot_bgcolor=colors['background'],
 paper_bgcolor=colors['background'],
@@ -31,14 +35,22 @@ font_color=colors['text'],
 margin=dict(l=20, r=20, t=35, b=20)
 )
 
-fig_cur=px.line(df,x="time [s]",y="Current",title='Current')
+fig_cur=px.line(df,x="time [s]",y="Current",
+labels={
+    "time [s]": "Time [ms]",
+    "Current": "Current [A*10]"
+},title='Current')
 fig_cur.update_layout(
 plot_bgcolor=colors['background'],
 paper_bgcolor=colors['background'],
 font_color=colors['text'],
 margin=dict(l=20, r=20, t=35, b=20)
 )
-fig_gas=px.line(df,x="time [s]",y=" Gas-flow",title='Gas flow')
+fig_gas=px.line(df,x="time [s]",y=" Gas-flow",
+labels={
+    "time [s]": "Time [ms]",
+    " Gas-flow": "Flow [L*10/min]"
+},title='Gas flow')
 fig_gas.update_layout(
 plot_bgcolor=colors['background'],
 paper_bgcolor=colors['background'],
@@ -46,7 +58,11 @@ font_color=colors['text'],
 margin=dict(l=20, r=20, t=35, b=20)
 )
 
-fig_wir=px.line(df,x="time [s]",y=" Wire-feed",title='Wirer speed')
+fig_wir=px.line(df,x="time [s]",y=" Wire-feed",
+labels={
+    "time [s]": "Time [ms]",
+    " Wire-feed": "Speed [m*10/min]"
+},title='Wirer speed')
 fig_wir.update_layout(
 plot_bgcolor=colors['background'],
 paper_bgcolor=colors['background'],
@@ -56,7 +72,11 @@ margin=dict(l=20, r=20, t=35, b=20)
 
 df=openfiles.df_from_path(openfiles.col_to_list(df_meta,'Path_sound'),-1)
 
-fig_ch1=px.line(df,x="time [s]",y="Channel_1",title='Channel 1')
+fig_ch1=px.line(df,x="time [s]",y="Channel_1",
+labels={
+"time [s]": "Time [ms]",
+"Channel_1": "Channel 1"
+},title='Channel 1')
 fig_ch1.update_layout(
 plot_bgcolor=colors['background2'],
 paper_bgcolor=colors['background2'],
@@ -64,7 +84,11 @@ font_color=colors['text'],
 margin=dict(l=20, r=20, t=25, b=20)
 )
 
-fig_ch2=px.line(df,x="time [s]",y="Channel_2",title='Channel 2')
+fig_ch2=px.line(df,x="time [s]",y="Channel_2",
+labels={
+"time [s]": "Time [ms]",
+"Channel_2": "Channel 2"
+},title='Channel 2')
 fig_ch2.update_layout(
 plot_bgcolor=colors['background2'],
 paper_bgcolor=colors['background2'],
@@ -72,7 +96,11 @@ font_color=colors['text'],
 margin=dict(l=20, r=20, t=25, b=20)
 )
 
-fig_ch3=px.line(df,x="time [s]",y="Channel_3",title='Channel 3')
+fig_ch3=px.line(df,x="time [s]",y="Channel_3",
+labels={
+"time [s]": "Time [ms]",
+"Channel_3": "Channel 3"
+},title='Channel 3')
 fig_ch3.update_layout(
 plot_bgcolor=colors['background2'],
 paper_bgcolor=colors['background2'],
@@ -80,7 +108,11 @@ font_color=colors['text'],
 margin=dict(l=20, r=20, t=25, b=20)
 )
 
-fig_ch4=px.line(df,x="time [s]",y="Channel_4",title='Channel 4')
+fig_ch4=px.line(df,x="time [s]",y="Channel_4",
+labels={
+"time [s]": "Time [ms]",
+"Channel_4": "Channel 4"
+},title='Channel 4')
 fig_ch4.update_layout(
 plot_bgcolor=colors['background2'],
 paper_bgcolor=colors['background2'],

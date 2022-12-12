@@ -14,6 +14,9 @@ def updata_df(i):
     cur_dir=os.listdir(data_dir+data_type[i])
 
     df = pd.read_csv(data_dir+data_type[i]+cur_dir[len(cur_dir)-1], sep=",")
+    if i == 4 or i==3:
+        df['time [s]']=df['time [s]']-df['time [s]'].iloc[0]
+
     #print(df)
     return df
 
@@ -74,6 +77,8 @@ def col_to_list(df,name):
 #Opens csv as dataframe based on the path
 def df_from_path(path_list,value):
     df = pd.read_csv(path_list[value], sep=",")
+    df['time [s]']=df['time [s]']-df['time [s]'].iloc[0]
+
     return df
 
 #check for new data
