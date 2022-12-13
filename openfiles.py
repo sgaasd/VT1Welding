@@ -181,6 +181,11 @@ if __name__ == '__main__':
     #open_scan()
     #vid=path_of_vid()
     #print(vid)
+
+    df_time=2022128
+    d_date=datetime.datetime.strptime(str(df_time), '%Y%m%d')
+    print(d_date)
+
     uptime()
     #df_meta=updata_df(1)
     uptime_graph(2022,12,8)

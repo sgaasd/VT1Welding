@@ -8,6 +8,7 @@ import openfiles
 from dash.dependencies import Input, Output
 import plotly.graph_objects as go
 import dash_bootstrap_components as dbc
+from datetime import date
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
 app = Dash(__name__,external_stylesheets=external_stylesheets,use_pages=True)
@@ -419,6 +420,26 @@ def update_value(value):
         ]
 
     return meta,value-1,fig_vol,fig_cur,fig_gas,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4
+
+@app.callback(
+    Output('output-container-date-picker-range', 'children'),
+    Input('my-date-picker-range', 'start_date'),
+    Input('my-date-picker-range', 'end_date'))
+def update_output(start_date, end_date):
+    string_prefix = 'You have selected: '
+    if start_date is not None:
+        start_date_object = date.fromisoformat(start_date)
+        start_date_string = str(start_date_object.year)+str(start_date_object.month)+str(start_date_object.day)
+        string_prefix = string_prefix + 'Start Date: ' + start_date_string + ' | '
+    if end_date is not None:
+        end_date_object = date.fromisoformat(end_date)
+        end_date_string = str(end_date_object.year)+str(end_date_object.month)+str(end_date_object.day)
+        string_prefix = string_prefix + 'End Date: ' + end_date_string
+    if len(string_prefix) == len('You have selected: '):
+        return 'Select a date to see it displayed here'
+    else:
+        return string_prefix
+
 
 if __name__ == '__main__':
     app.run_server(debug=False)
