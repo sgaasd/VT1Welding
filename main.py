@@ -190,7 +190,7 @@ def save_meta(test_nb,start_t,end_t,sample_rate_weld,sample_rate_sound,test_resu
 
     df_param=pd.read_csv("Data/meta/00_semi_constant_param.csv",sep=',')
     df_of_inf = pd.concat([df_of_inf, df_param], ignore_index=True,axis=1, join='inner')
-    df_of_inf.columns = ['Test_number','Date_y_m_d','Start_time_[unix_ms]','End_time_[unix_ms]','Sample_rate_weld[Hz]','Sample_rate_sound[Hz]','Rating','Path_sound','Path_weld','Path_video','Thickness_hor[mm]','Thickness_ver[mm]','Current[A*10]','Voltage[V*10]','Wire_feed[m/min]','Gas_flow[L/min]','Describtion','Notes','Material','Gas_type','Electrode','Travel_speed[m/min]','Electrode_d[mm]','Wire_stictout[mm]','Gun_angle']
+    df_of_inf.columns = ['Test_number','Date_y_m_d','Start_time_[unix_ms]','End_time_[unix_ms]','Sample_rate_weld[Hz]','Sample_rate_sound[Hz]','Rating','Path_sound','Path_weld','Path_video','Thickness_hor[mm]','Thickness_ver[mm]','Current[A*10]','Voltage[V*10]','Wire_feed[m/min]','Gas_flow[L/min]','Describtion','Notes','Material','Gas_type','Electrode','Travel_speed[m/min]','Electrode_d[mm]','Wire_stictout[mm]','Gun_angle','Worker_angle','Length']
     #this also has to be commentet out
     df = df.append(df_of_inf, ignore_index = True)
     print("saving data")

@@ -1,9 +1,10 @@
 import pandas as pd
 import os
-
+import matplotlib.pyplot as plt
 import numpy as np
 import open3d
-
+import datetime
+import time
 
 #used for updating a dataframe 
 def updata_df(i):
@@ -91,6 +92,85 @@ def new_measure_check(previous,list_to_check):
     else:
         return False, now
 
+def numerical_int(int_var,y,m,d):
+    date = datetime.date(y,m,d)
+
+    unixtime = time.mktime(date.timetuple())
+
+    data_dir="Data/"
+    data_type=["cam/","info/","scan/","sound/","weld/"]
+    cur_dir=os.listdir(data_dir+data_type[4])
+    
+    area=0
+    arealist=[]
+    timelist=[]
+    for i in cur_dir:
+        path=data_dir+data_type[4]+i
+        df = pd.read_csv(path, sep=',')
+        df_var=df[int_var].div(100)
+        df_time=df['time [s]'].div(1000)
+        df_time=df_time-unixtime
+        df_time=df_time.div(60)
+
+
+        #start values
+
+        timelist.append(df_time.iat[0])
+        arealist.append(area)
+
+        for i in range(1,len(df_time)):
+            h=df_time.iat[i]-df_time.iat[i-1]
+            a=df_var.iat[i-1]
+            b=df_var.iat[i]
+            area=h*(1/2*(a+b))
+            area=area+arealist[-1]
+            arealist.append(area)
+            timelist.append(df_time.iat[i])
+
+    timelist=[x / 60 for x in timelist]
+
+    plt.plot(timelist, arealist)
+    plt.show()
+
+def uptime_graph(y,m,d):
+
+
+
+    data_dir="Data/"
+    data_type=["cam/","info/","scan/","sound/","weld/"]
+    cur_dir=os.listdir(data_dir+data_type[4])
+    util_list=[]
+    util_time=[]
+    cur_time=0
+    timelist=[]
+
+
+    for i in cur_dir:
+        path=data_dir+data_type[4]+i
+        df = pd.read_csv(path, sep=',')
+        date = datetime.date(y,m,d)
+        unixtime = time.mktime(date.timetuple())
+        df_time=df['time [s]'].div(1000)
+        df_time=df_time-unixtime
+        df_time=df_time.div(60)
+        df_time=df_time.div(60)
+        timelist.append(df_time.iat[0])
+        util_time.append(cur_time)
+        util_list.append(cur_time/(timelist[-1])*100)
+        for i in range(1,len(df_time)):
+            cur_time=df_time.iat[i]-df_time.iat[i-1]
+            cur_time=cur_time+util_time[-1]
+            util_time.append(cur_time)
+            timelist.append(df_time.iat[i])
+
+            util_list.append(cur_time/(timelist[-1])*100)
+
+    plt.plot(timelist, util_list)
+    plt.show()
+
+
+
+        
 
 
 if __name__ == '__main__':
@@ -103,6 +183,10 @@ if __name__ == '__main__':
     #print(vid)
     uptime()
     #df_meta=updata_df(1)
+    uptime_graph(2022,12,8)
+    numerical_int(" Wire-feed",2022,12,8)
+    numerical_int(" Gas-flow",2022,12,8)
+    
 
     #list_of_test=col_to_list(df_meta,'Test_number')
     #df_weld=df_from_path(col_to_list(df_meta,'Path_weld'),-1)
