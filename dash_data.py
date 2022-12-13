@@ -422,27 +422,85 @@ def update_value(value):
     return meta,value-1,fig_vol,fig_cur,fig_gas,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4
 
 @app.callback(
-    Output('output-container-date-picker-range', 'children'),
-    Input('my-date-picker-range', 'start_date'),
-    Input('my-date-picker-range', 'end_date'))
-def update_output(start_date, end_date):
+    Output('util_graph' , 'children'),
+    Output('usage_graphs' , 'children'),
+
+    Input('my-date-picker-single', 'date'))
+def update_output(date_value):
     string_prefix = 'You have selected: '
-    if start_date is not None:
-        start_date_object = date.fromisoformat(start_date)
-        start_date_string = str(start_date_object.year)+str(start_date_object.month)+str(start_date_object.day)
-        string_prefix = string_prefix + 'Start Date: ' + start_date_string + ' | '
-    if end_date is not None:
-        end_date_object = date.fromisoformat(end_date)
-        end_date_string = str(end_date_object.year)+str(end_date_object.month)+str(end_date_object.day)
-        string_prefix = string_prefix + 'End Date: ' + end_date_string
-    if len(string_prefix) == len('You have selected: '):
-        return 'Select a date to see it displayed here'
+    if date_value is not None:
+        date_object = date.fromisoformat(date_value)
+        date_string = date_object.strftime('%Y%m%d')
+
+        df_wire=openfiles.numerical_int(" Wire-feed",int(date_string))
+        df_gas=openfiles.numerical_int(" Gas-flow",int(date_string))
+
+        fig_wir_consumed=px.line(df_wire,x="Time [h]",y="Wire used [m]",title='Wire consumed')
+        fig_wir_consumed.update_layout(
+        plot_bgcolor=colors['background'],
+        paper_bgcolor=colors['background'],
+        font_color=colors['text'],
+        margin=dict(l=20, r=20, t=35, b=20)
+        )
+        fig_gas_consumed=px.line(df_gas,x="Time [h]",y="Gas used [L]",title='Gas consumed')
+        fig_gas_consumed.update_layout(
+        plot_bgcolor=colors['background'],
+        paper_bgcolor=colors['background'],
+        font_color=colors['text'],
+        margin=dict(l=20, r=20, t=35, b=20)
+        )
+
+        left_layout=[html.H1(' KPI Dashboard'),html.H3(' Welding Material Consumption'),
+
+            dcc.Graph(
+                id='graph-wir-con',
+                figure=fig_wir_consumed,style={'width': '100%', 'height': '40vh','text-align': 'center','padding':'1rem',}
+            ),
+            html.Hr(style={'width': '95%'}),
+            dcc.Graph(
+                id='graph-gas-con',
+                figure=fig_gas_consumed,style={'width': '100%', 'height': '40vh','text-align': 'center','padding':'1rem'}
+            ),
+        ]
+
+        df_util=openfiles.uptime_graph(int(date_string))
+        print(df_util)
+        fig_util=px.line(df_util,x="Time [h]",y="Utilization Rate Daily [%]",title='Daily Utilization Rate')
+        fig_util.update_layout(
+        plot_bgcolor=colors['background'],
+        paper_bgcolor=colors['background'],
+        font_color=colors['text'],
+        margin=dict(l=20, r=20, t=35, b=20)
+        )
+        fig_util_fl=px.line(df_util,x="Time [h]",y="Utilization Rate [%]",title='First to Last Test Utilization Rate')
+        fig_util_fl.update_layout(
+        plot_bgcolor=colors['background'],
+        paper_bgcolor=colors['background'],
+        font_color=colors['text'],
+        margin=dict(l=20, r=20, t=35, b=20)
+        )
+
+        right_layout=[html.H3('Utilization statistics'),
+            dcc.Graph(
+                id='graph-ut-d',
+                figure=fig_util,style={'width': '100%', 'height': '35vh','text-align': 'center','padding':'1rem',}
+            ),
+            dcc.Graph(
+                id='graph-ut-fl',
+                figure=fig_util_fl,style={'width': '100%', 'height': '35vh','text-align': 'center','padding':'1rem',}
+            ),
+
+        ]
+        return right_layout,left_layout
     else:
-        return string_prefix
+        return "No Date has been chosen",html.H1(' KPI Dashboard')
+
+
+        
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)
 
 
 

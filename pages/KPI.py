@@ -26,7 +26,7 @@ past_len=0
 dash.register_page(__name__)
 ##Layout for the live page that updates whenever there is new data
 layout=([
-    html.Div(className="left_menu",id="left_menu3",children=["fetching data"]),
+    html.Div(className="left_menu",id="usage_graphs",children=[html.H1(' KPI Dashboard')]),
     html.Div(className="right_content",
     children=[
             html.Div(
@@ -38,19 +38,15 @@ layout=([
                                'margin-bottom':'0px',
                                'font-size': '25px'})]),
             html.Div([
-                    dcc.DatePickerRange(
-                    id='my-date-picker-range',
-                    min_date_allowed=date(1995, 8, 5),
-                    max_date_allowed=date(2017, 9, 19),
-                    initial_visible_month=date(2017, 8, 5),
-                    end_date=date(2017, 8, 25)
+                    dcc.DatePickerSingle(
+                        id='my-date-picker-single',
+                        placeholder='Select date',
                     ),
-                    html.Div(id='output-container-date-picker-range')
+                    html.Div(id='utiltotal')
             ])
             ]
 
         ),
-        html.Div(className="bottem_right_menu",id="bottem_right_menu3",children=["fetching data"]
-        )]),
-dcc.Store(id='determine_update')
+        html.Div(className="bottem_right_menu",id="util_graph",children=["fetching data"]
+        )])
 ])

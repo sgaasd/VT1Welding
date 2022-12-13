@@ -15,7 +15,7 @@ https://google.github.io/styleguide/pyguide.html#3164-guidelines-derived-from-gu
 def save_data(data_type,data,rating):
     print("saving data")
     today= datetime.today()
-    test_name=str(today.year)+str(today.month)+str(today.day)
+    test_name=today.strftime('%Y%m%d')
     cur_dir = os.getcwd()
     number=len(os.listdir(cur_dir+"/Data/"+data_type))+1
     number=f"{number:03d}"
@@ -176,7 +176,7 @@ def comment_data():
 #saves all the meta data needed
 def save_meta(test_nb,start_t,end_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes):
     today= datetime.today()
-    test_name=str(today.year)+str(today.month)+str(today.day)
+    test_name=today.strftime('%Y%m%d')
     list_of_inf=[[test_nb,test_name,start_t,end_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes]]
     df_of_inf=pd.DataFrame(list_of_inf,columns=['Test_number','Date_y_m_d','Start_time_[unix_ms]','End_time_[unix_ms]','Sample_rate_weld[Hz]','Sample_rate_sound[Hz]','Rating','Path_sound','Path_weld','Path_video','Thickness_hor[mm]','Thickness_ver[mm]','Current[A*10]','Voltage[V*10]','Wire_feed[m/min]','Gas_flow[L/min]','Describtion','Notes'])
     

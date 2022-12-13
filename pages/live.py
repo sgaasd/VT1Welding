@@ -25,7 +25,6 @@ past_len=0
 dash.register_page(__name__,path='/')
 ##Layout for the live page that updates whenever there is new data
 layout=([
-
     dcc.Interval(id='update_interval', disabled=False, interval=1*10000, n_intervals=0),
     html.Div(className="left_menu",id="left_menu",children=["fetching data"]),
     html.Div(className="right_content",

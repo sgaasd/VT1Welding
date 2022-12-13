@@ -92,21 +92,22 @@ def new_measure_check(previous,list_to_check):
     else:
         return False, now
 
-def numerical_int(int_var,y,m,d):
-    date = datetime.date(y,m,d)
+def numerical_int(int_var,ymd):
+    date=datetime.datetime.strptime(str(ymd), '%Y%m%d')
 
     unixtime = time.mktime(date.timetuple())
 
-    data_dir="Data/"
-    data_type=["cam/","info/","scan/","sound/","weld/"]
-    cur_dir=os.listdir(data_dir+data_type[4])
-    
+
+    df_meta= updata_df(1)
+    df_date=df_meta[df_meta['Date_y_m_d'] == ymd]
+    cur_dir=df_date['Path_weld']
+
     area=0
     arealist=[]
     timelist=[]
     for i in cur_dir:
-        path=data_dir+data_type[4]+i
-        df = pd.read_csv(path, sep=',')
+        
+        df = pd.read_csv(i, sep=',')
         df_var=df[int_var].div(100)
         df_time=df['time [s]'].div(1000)
         df_time=df_time-unixtime
@@ -129,26 +130,37 @@ def numerical_int(int_var,y,m,d):
 
     timelist=[x / 60 for x in timelist]
 
-    plt.plot(timelist, arealist)
-    plt.show()
+    #plt.plot(timelist, arealist)
+    #plt.show()
 
-def uptime_graph(y,m,d):
+    if int_var==" Wire-feed":
+        df=pd.DataFrame(list(zip(timelist,arealist)),columns=['Time [h]','Wire used [m]'])
+    else:
+        df=pd.DataFrame(list(zip(timelist,arealist)),columns=['Time [h]','Gas used [L]'])
+    
+    return df
 
 
 
-    data_dir="Data/"
-    data_type=["cam/","info/","scan/","sound/","weld/"]
-    cur_dir=os.listdir(data_dir+data_type[4])
+
+def uptime_graph(ymd):
+
+    df_meta= updata_df(1)
+    df_date=df_meta[df_meta['Date_y_m_d'] == ymd]
+    cur_dir=df_date['Path_weld']
+
+    
     util_list=[]
+    util_first_last=[]
     util_time=[]
     cur_time=0
     timelist=[]
 
 
     for i in cur_dir:
-        path=data_dir+data_type[4]+i
-        df = pd.read_csv(path, sep=',')
-        date = datetime.date(y,m,d)
+        df = pd.read_csv(i, sep=',')
+        date=datetime.datetime.strptime(str(ymd), '%Y%m%d')
+        
         unixtime = time.mktime(date.timetuple())
         df_time=df['time [s]'].div(1000)
         df_time=df_time-unixtime
@@ -156,17 +168,23 @@ def uptime_graph(y,m,d):
         df_time=df_time.div(60)
         timelist.append(df_time.iat[0])
         util_time.append(cur_time)
-        util_list.append(cur_time/(timelist[-1])*100)
+        util_list.append(cur_time/24*100)
+        util_first_last.append(cur_time/(timelist[-1]-timelist[0])*100)
         for i in range(1,len(df_time)):
             cur_time=df_time.iat[i]-df_time.iat[i-1]
             cur_time=cur_time+util_time[-1]
             util_time.append(cur_time)
             timelist.append(df_time.iat[i])
 
-            util_list.append(cur_time/(timelist[-1])*100)
+            util_list.append(cur_time/24*100)
+            util_first_last.append(cur_time/(timelist[-1]-timelist[0])*100)
 
-    plt.plot(timelist, util_list)
-    plt.show()
+    #plt.plot(timelist, util_list)
+    #plt.show()
+
+    df=pd.DataFrame(list(zip(timelist,util_list,util_first_last)),columns=['Time [h]','Utilization Rate Daily [%]','Utilization Rate [%]'])
+
+    return df
 
 
 
@@ -182,15 +200,15 @@ if __name__ == '__main__':
     #vid=path_of_vid()
     #print(vid)
 
-    df_time=2022128
+    df_time=20221208
     d_date=datetime.datetime.strptime(str(df_time), '%Y%m%d')
     print(d_date)
 
     uptime()
     #df_meta=updata_df(1)
-    uptime_graph(2022,12,8)
-    numerical_int(" Wire-feed",2022,12,8)
-    numerical_int(" Gas-flow",2022,12,8)
+    uptime_graph(df_time)
+    numerical_int(" Wire-feed",20221208)
+    numerical_int(" Gas-flow",20221208)
     
 
     #list_of_test=col_to_list(df_meta,'Test_number')
