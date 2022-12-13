@@ -260,7 +260,7 @@ def update_drop_live(n,past_len):
     return no_update,past_len
 
 
-@app.callback(Output('meta_dat2', 'children'),Output('drop_value','data'),Output('graph-vol2','figure'),Output('graph-cur2','figure'),Output('graph-gas2','figure'),Output('graph-wir2','figure'),Output('graph-ch12','figure'),Output('graph-ch22','figure'),Output('graph-ch32','figure'),Output('graph-ch42','figure'),Input('test_dropdown','value'))
+@app.callback(Output('meta_dat2', 'children'),Output('drop_value','data'),Output('weld_drop', 'children'),Output('mic_drop', 'children'),Input('test_dropdown','value'))
 #updates the figures based on the option chosen in the dropdown menu
 def update_value(value):
     print(value)
@@ -418,8 +418,46 @@ def update_value(value):
 
         
         ]
+    
+    left_layout=[
+        html.H1('Data Visualisation of Robotic Welding',style={'margin-top':   '5px','margin-left':  '10px'}),
+        #html.Hr(style={'width': '95%'}),
+        dcc.Graph(
+        id='graph-vol2',
+        figure=fig_vol,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
+        html.Hr(style={'width': '95%'}),
+        dcc.Graph(
+        id='graph-cur2',
+        figure=fig_cur,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
+        html.Hr(style={'width': '95%'}),
+        dcc.Graph(
+        id='graph-gas2',
+        figure=fig_gas,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
+        html.Hr(style={'width': '95%'}),
+        dcc.Graph(
+        id='graph-wir2',
+        figure=fig_wir,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'})]
 
-    return meta,value-1,fig_vol,fig_cur,fig_gas,fig_wir,fig_ch1,fig_ch2,fig_ch3,fig_ch4
+    right_layout=[html.H3(' Microphone data'),
+            dcc.Graph(
+                id='graph-ch12',
+                figure=fig_ch1,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem',}
+            ),
+            dcc.Graph(
+                id='graph-ch22',
+                figure=fig_ch2,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+            ),
+            dcc.Graph(
+                id='graph-ch32',
+                figure=fig_ch3,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+            ),
+            dcc.Graph(
+                id='graph-ch42',
+                figure=fig_ch4,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+            )
+        ]
+
+    return meta,value-1,left_layout,right_layout
 
 @app.callback(
     Output('util_graph' , 'children'),
@@ -500,7 +538,7 @@ def update_output(date_value):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
 
 
 

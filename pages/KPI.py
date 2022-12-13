@@ -32,16 +32,16 @@ layout=([
             html.Div(
             className="top_metrics",
             children=[html.Div(children=[
-            html.H1(children='KPI: choose a date',style={
+            html.H1(children='Date',style={
                                'margin-top':   '0px',
-                               'margin-left':  '0px',
+                               'margin-left':  '5px',
                                'margin-bottom':'0px',
                                'font-size': '25px'})]),
             html.Div([
                     dcc.DatePickerSingle(
                         id='my-date-picker-single',
                         placeholder='Select date',
-                    ),
+                    style={'margin-left':  '10px',}),
                     html.Div(id='utiltotal')
             ])
             ]
