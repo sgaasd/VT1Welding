@@ -2,7 +2,7 @@ from scipy.io import wavfile
 import matplotlib.pyplot as plt
 import numpy as np
 
-samplerate, data = wavfile.read('output.wav')
+samplerate, data = wavfile.read('channel_1.wav')
 datalist = data.tolist()
 print(len(datalist))
 plt.plot(datalist)
