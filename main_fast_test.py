@@ -5,11 +5,38 @@ import pandas as pd
 import cv2 as cv
 import time
 import numpy as np
-
+from threading import Thread
 '''
 Style guide comes from: 
 https://google.github.io/styleguide/pyguide.html#3164-guidelines-derived-from-guidos-recommendations
 '''
+
+class VideoGet:
+    """
+    Class that continuously gets frames from a VideoCapture object
+    with a dedicated thread.
+    """
+
+    def __init__(self, src=0):
+        self.stream = cv.VideoCapture(src)
+        (self.grabbed, self.frame) = self.stream.read()
+        self.stopped = False
+
+    def start(self):
+        Thread(target=self.get, args=()).start()
+        return self
+
+    def get(self):
+        while not self.stopped:
+            if not self.grabbed:
+                self.stop()
+            else:
+                (self.grabbed, self.frame) = self.stream.read()
+
+    def stop(self):
+        self.stopped = True
+
+
 #Saves and names a data frame based on the type and a rating of the weldment
 def save_data(data_type,data,rating):
     print("saving data")

@@ -48,8 +48,8 @@ def stoprec(array):
 
 
 if __name__ == '__main__':
-    array=CallMic(20,16000)
-    time.sleep(5)
+    array=CallMic(60,16000)
+    time.sleep(60)
     stoprec(array)
 
 

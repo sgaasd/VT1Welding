@@ -6,11 +6,62 @@ import cv2 as cv
 import Microphones
 import time
 import numpy as np
+from threading import Thread
 
 '''
 Style guide comes from: 
 https://google.github.io/styleguide/pyguide.html#3164-guidelines-derived-from-guidos-recommendations
 '''
+
+class VideoGet:
+    """
+    Class that continuously gets frames from a VideoCapture object
+    with a dedicated thread.
+    """
+
+    def __init__(self, src=1):
+        self.stream = cv.VideoCapture(src)
+        self.ret = self.stream.set(cv.CAP_PROP_FRAME_WIDTH,1920)
+        self.ret = self.stream.set(cv.CAP_PROP_FRAME_HEIGHT,1080)
+        fourcc = cv.VideoWriter_fourcc(*"mp4v")
+        today= datetime.today()
+        cur_dir = os.getcwd()
+        number=len(os.listdir(cur_dir+"/Data/cam"))+1
+        test_name=str(today.year)+str(today.month)+str(today.day)
+        test_name=str(test_name)+"_cam_"+str(number)+'.mp4'
+        self.out = cv.VideoWriter('Data/cam/'+test_name, fourcc, 30.0, (1920, 1080))
+        (self.grabbed, self.frame) = self.stream.read()
+        self.stopped = False
+
+        
+
+    def initialise(self):
+        pass
+
+    def start(self):
+        Thread(target=self.get, args=()).start()
+        return self
+
+    def get(self):
+        while not self.stopped:
+            if not self.grabbed:
+                self.stop()
+            else:
+                (self.grabbed, self.frame) = self.stream.read()
+
+                self.out.write(self.frame) #Start saving the frames to the video
+
+    def stop(self):
+        self.stopped = True
+        self.out.release()
+        self.stream.release()
+        cv.destroyAllWindows()
+        
+    def stop_camera(self):
+        pass
+
+
+
 #Saves and names a data frame based on the type and a rating of the weldment
 def save_data(data_type,data,rating):
     print("saving data")
@@ -220,9 +271,7 @@ def data_exchange_with_cowelder():
     connection, address = ur10_socket.accept()
     print(connection)
     print(address)
-    cap = cv.VideoCapture(1)
-    ret = cap.set(cv.CAP_PROP_FRAME_WIDTH,1920)
-    ret = cap.set(cv.CAP_PROP_FRAME_HEIGHT,1080)
+    
 
     close_socket = False
     initiate_weld_signal = "NULL"
@@ -231,99 +280,124 @@ def data_exchange_with_cowelder():
 
     
     
-
-    while close_socket == False:
-        if initiate == True:
-            fourcc = cv.VideoWriter_fourcc(*"mp4v")
-            today= datetime.today()
-            cur_dir = os.getcwd()
-            number=len(os.listdir(cur_dir+"/Data/cam"))+1
-            test_name=str(today.year)+str(today.month)+str(today.day)
-            test_name=str(test_name)+"_cam_"+str(number)+'.mp4'
-            out = cv.VideoWriter('Data/cam/'+test_name, fourcc, 30.0, (1920, 1080))
-            path_video='Data/cam/'+test_name
-            initiate = False
-            #ret, frame = cap.read()
-#        cv.waitKey(1)start
-#        cv.imshow('frame', frame)
-        current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df_last_setting)
-        initiate_go_signal = input("Type 'start' to initiate program: ")
-        welding_data_list = ["Current, Voltage, Wire-feed, Gas-flow"] ###SKAL DETTE ÆNDRES????
-        if initiate_go_signal == "start": #Start til før svejsning
-            while initiate_weld_signal == "NULL":
-                connection.send((bytes('(1)', 'ascii'))) #Sender signal til roboten om den skal starte
-                recieved_data = connection.recv(1024) # forventer at modtaget et signal om at den er kørt til svejseposition
-                #if recieved_data.decode("utf-8") == 3:
-                if recieved_data == int.to_bytes(3,4,'big'):
-                    welding_tip_in_position = True
-                    initiate_weld_signal = input("Type 'weld' to start welding: ")
-        if initiate_weld_signal == "weld" and welding_tip_in_position == True: #Start svejsning og begynder data indsamling
-            initiate_go_signal = "NULL"
-            Micdata=Microphones.CallMic(60,16000)
-            connection.send((bytes('(2)', 'ascii')))
-            unix_time_start=datetime.now()
-            unix_time_start=time.mktime(unix_time_start.timetuple())*1e3 + unix_time_start.microsecond/1e3
-
-            while weldment_done == False: 
-                #print("while loop")
+    try:
+        while close_socket == False:
+            if initiate == True:
+                today= datetime.today()
+                cur_dir = os.getcwd()
+                number=len(os.listdir(cur_dir+"/Data/cam"))+1
+                test_name=str(today.year)+str(today.month)+str(today.day)
+                test_name=str(test_name)+"_cam_"+str(number)+'.mp4'
+                path_video='Data/cam/'+test_name
+                initiate = False
+                video_getter = VideoGet(1)
+                #ret, frame = cap.read()
+    #        cv.waitKey(1)start
+    #        cv.imshow('frame', frame)
+            current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df_last_setting)
+            initiate_go_signal = input("Type 'start' to initiate program: ")
+            welding_data_list = ["Current, Voltage, Wire-feed, Gas-flow"] ###SKAL DETTE ÆNDRES????
+            if initiate_go_signal == "start": #Start til før svejsning
+                while initiate_weld_signal == "NULL":
+                    connection.send((bytes('(1)', 'ascii'))) #Sender signal til roboten om den skal starte
+                    recieved_data = connection.recv(1024) # forventer at modtaget et signal om at den er kørt til svejseposition
+                    #if recieved_data.decode("utf-8") == 3:
+                    if recieved_data == int.to_bytes(3,4,'big'):
+                        welding_tip_in_position = True
+                        initiate_weld_signal = input("Type 'weld' to start welding: ")
+            if initiate_weld_signal == "weld" and welding_tip_in_position == True: #Start svejsning og begynder data indsamling
+                initiate_go_signal = "NULL"
+                Micdata=Microphones.CallMic(60,16000)
+                video_getter.start()
                 connection.send((bytes('(2)', 'ascii')))
-                recieved_data = connection.recv(1024)
-                #print(recieved_data)
-                ret, frame = cap.read()
-#                cv.waitKey(1)
-#                cv.imshow('frame', frame)
-                out.write(frame) #Start saving the frames to the video
-                #if recieved_data.decode("utf-8") == 4:
-                if recieved_data == int.to_bytes(4,4,'big'):
-                    connection.send((bytes('(0)', 'ascii')))
-                    unix_time_end=datetime.now()
-                    unix_time_end=time.mktime(unix_time_end.timetuple())*1e3 + unix_time_end.microsecond/1e3
-                    Micdata=Microphones.stoprec(Micdata)
-                    weldment_done = True  
+                unix_time_start=datetime.now()
+                unix_time_start=time.mktime(unix_time_start.timetuple())*1e3 + unix_time_start.microsecond/1e3
 
-                else:
-                    #welding_data_list.append(recieved_data.decode("utf-8"))
-                    welding_data_list.append(recieved_data.decode("utf-8"))
-                    #print("welding data saved")
-            welding_tip_in_position = False        
-            initiate_weld_signal = "NULL"
-            #print(welding_data_list)
-        if weldment_done == True: #Gemmer data
-            welding_data_dataframe = pd.DataFrame(welding_data_list)
-            welding_data_dataframe = welding_data_dataframe[0].str.split(',',expand=True)
-            new_header = welding_data_dataframe.iloc[0] #grab the first row for the headery
-            welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
-            welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
-            lst=np.linspace(unix_time_start,unix_time_end,len(welding_data_dataframe.index))
-            welding_data_dataframe['time [s]']=lst
+                while weldment_done == False: 
+                    #print("while loop")
+                    connection.send((bytes('(2)', 'ascii')))
+                    recieved_data = connection.recv(1024)
+                    #print(recieved_data)
+                    
+                    #if recieved_data.decode("utf-8") == 4:
+                    if recieved_data == int.to_bytes(4,4,'big'):
+                        connection.send((bytes('(0)', 'ascii')))
+                        unix_time_end=datetime.now()
+                        unix_time_end=time.mktime(unix_time_end.timetuple())*1e3 + unix_time_end.microsecond/1e3
+                        Micdata=Microphones.stoprec(Micdata)
+                        video_getter.stop()
+                        weldment_done = True  
 
-            cols =  welding_data_dataframe.columns.tolist()
-            cols = cols[-1:] + cols[:-1]
-            welding_data_dataframe = welding_data_dataframe[cols]
-            mic_df=pd.DataFrame(Micdata,columns=['Channel_1','Channel_2','Channel_3','Channel_4'])
-            lst=np.linspace(unix_time_start,unix_time_end,len(mic_df.index))
-            #print(welding_data_dataframe)
-            mic_df['time [s]']=lst
-            cols =  mic_df.columns.tolist()
-            cols = cols[-1:] + cols[:-1]
-            mic_df = mic_df[cols]
-            out.release()
-            test_result,notes=comment_data()
-            path_weld=save_data("weld", data=welding_data_dataframe, rating=test_result)
-            path_sound=save_data("sound", data=mic_df, rating=test_result)
-            df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
-            weldment_done = False
+                    else:
+                        #welding_data_list.append(recieved_data.decode("utf-8"))
+                        welding_data_list.append(recieved_data.decode("utf-8"))
+                        #print("welding data saved")
+                welding_tip_in_position = False        
+                initiate_weld_signal = "NULL"
+                #print(welding_data_list)
+            if weldment_done == True: #Gemmer data
+                welding_data_dataframe = pd.DataFrame(welding_data_list)
+                welding_data_dataframe = welding_data_dataframe[0].str.split(',',expand=True)
+                new_header = welding_data_dataframe.iloc[0] #grab the first row for the headery
+                welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
+                welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
+                lst=np.linspace(unix_time_start,unix_time_end,len(welding_data_dataframe.index))
+                welding_data_dataframe['time [s]']=lst
 
-        if input("Continue to weld another piece press 'y' | shutdown press 'n': ") == "n":
-            close_socket = True
-            connection.send((bytes('(5)', 'ascii')))
-            connection.close()
-            cap.release()
-            cv.destroyAllWindows()
-        else:
-            initiate = True
-            #cap.release()
+                cols =  welding_data_dataframe.columns.tolist()
+                cols = cols[-1:] + cols[:-1]
+                welding_data_dataframe = welding_data_dataframe[cols]
+                mic_df=pd.DataFrame(Micdata,columns=['Channel_1','Channel_2','Channel_3','Channel_4'])
+                lst=np.linspace(unix_time_start,unix_time_end,len(mic_df.index))
+                #print(welding_data_dataframe)
+                mic_df['time [s]']=lst
+                cols =  mic_df.columns.tolist()
+                cols = cols[-1:] + cols[:-1]
+                mic_df = mic_df[cols]
+                
+                test_result,notes=comment_data()
+                path_weld=save_data("weld", data=welding_data_dataframe, rating=test_result)
+                path_sound=save_data("sound", data=mic_df, rating=test_result)
+                df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
+                weldment_done = False
 
+            if input("Continue to weld another piece press 'y' | shutdown press 'n': ") == "n":
+                close_socket = True
+                connection.send((bytes('(5)', 'ascii')))
+                connection.close()
+                
+            else:
+                initiate = True
+                #cap.release()
+    except:
+        unix_time_end=datetime.now()
+        unix_time_end=time.mktime(unix_time_end.timetuple())*1e3 + unix_time_end.microsecond/1e3
+        Micdata=Microphones.stoprec(Micdata)
+        welding_data_dataframe = pd.DataFrame(welding_data_list)
+        welding_data_dataframe = welding_data_dataframe[0].str.split(',',expand=True)
+        new_header = welding_data_dataframe.iloc[0] #grab the first row for the headery
+        welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
+        welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
+        lst=np.linspace(unix_time_start,unix_time_end,len(welding_data_dataframe.index))
+        welding_data_dataframe['time [s]']=lst
+
+        cols =  welding_data_dataframe.columns.tolist()
+        cols = cols[-1:] + cols[:-1]
+        welding_data_dataframe = welding_data_dataframe[cols]
+        mic_df=pd.DataFrame(Micdata,columns=['Channel_1','Channel_2','Channel_3','Channel_4'])
+        lst=np.linspace(unix_time_start,unix_time_end,len(mic_df.index))
+        #print(welding_data_dataframe)
+        mic_df['time [s]']=lst
+        cols =  mic_df.columns.tolist()
+        cols = cols[-1:] + cols[:-1]
+        mic_df = mic_df[cols]
+                
+        test_result,notes=comment_data()
+        path_weld=save_data("weld", data=welding_data_dataframe, rating=test_result)
+        path_sound=save_data("sound", data=mic_df, rating=test_result)
+        df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
+        connection.close()
+        video_getter.stop()
 
 def main():
     data_exchange_with_cowelder()
