@@ -373,6 +373,7 @@ def data_exchange_with_cowelder():
         unix_time_end=datetime.now()
         unix_time_end=time.mktime(unix_time_end.timetuple())*1e3 + unix_time_end.microsecond/1e3
         Micdata=Microphones.stoprec(Micdata)
+        video_getter.stop()
         welding_data_dataframe = pd.DataFrame(welding_data_list)
         welding_data_dataframe = welding_data_dataframe[0].str.split(',',expand=True)
         new_header = welding_data_dataframe.iloc[0] #grab the first row for the headery
@@ -397,7 +398,7 @@ def data_exchange_with_cowelder():
         path_sound=save_data("sound", data=mic_df, rating=test_result)
         df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
         connection.close()
-        video_getter.stop()
+        
 
 def main():
     data_exchange_with_cowelder()
