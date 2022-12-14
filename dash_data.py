@@ -89,7 +89,7 @@ def update_figs_live(n,past_len):
         labels={
         "time [s]": "Time [ms]",
         " Wire-feed": "Speed [m*10/min]"
-        },title='Wirer speed')
+        },title='Wire speed')
         fig_wir.update_layout(
         plot_bgcolor=colors['background'],
         paper_bgcolor=colors['background'],
@@ -202,7 +202,7 @@ def update_figs_live(n,past_len):
                         dbc.Col(html.Div(df_meta.iat[-1,15]), width="auto")
                     ]),
                     dbc.Row([
-                        dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
+                        dbc.Col(html.Div(['Wire feed speed [m/min]: ']), width=8),
                         dbc.Col(html.Div(df_meta.iat[-1,14]), width="auto")
                     ]),
                     dbc.Row([
@@ -381,7 +381,7 @@ def update_value(value):
                     dbc.Col(html.Div(df_meta.iat[value-1,15]), width="auto")
                 ]),
                 dbc.Row([
-                    dbc.Col(html.Div(['Wirer feed speed [m/min]: ']), width=8),
+                    dbc.Col(html.Div(['Wire feed speed [m/min]: ']), width=8),
                     dbc.Col(html.Div(df_meta.iat[value-1,14]), width="auto")
                 ]),
                 dbc.Row([
