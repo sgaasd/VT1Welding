@@ -95,6 +95,14 @@ def data_exchange_with_cowelder():
             cols = cols[-1:] + cols[:-1]
             welding_data_dataframe = welding_data_dataframe[cols]
 
+            print("Time start")
+            print(unix_time_start)
+            print('Time end')
+            print(unix_time_end)
+            print('diff')
+            print(unix_time_end-unix_time_start)
+
+            path_weld=save_data("weld", data=welding_data_dataframe, rating=4)
 
             weldment_done = False
 
