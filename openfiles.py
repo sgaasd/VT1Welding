@@ -108,7 +108,7 @@ def numerical_int(int_var,ymd):
     for i in cur_dir:
         
         df = pd.read_csv(i, sep=',')
-        df_var=df[int_var].div(100)
+        df_var=df[int_var].div(10)
         df_time=df['time [s]'].div(1000)
         df_time=df_time-unixtime
         df_time=df_time.div(60)
