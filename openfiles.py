@@ -6,7 +6,7 @@ import open3d
 import datetime
 import time
 
-#used for updating a dataframe 
+#used for updating a dataframe used for the live pages since it uses the newest file 
 def updata_df(i):
     Hz=10
     data_dir="Data/"
@@ -82,7 +82,7 @@ def df_from_path(path_list,value):
 
     return df
 
-#check for new data
+#check for new data to update the dashboard, returns true or false
 def new_measure_check(previous,list_to_check):
 
 
@@ -92,6 +92,7 @@ def new_measure_check(previous,list_to_check):
     else:
         return False, now
 
+#numarical integration input: int_var: the integrated variable either " Wire-feed" or " Gas-flow" ymd: the date as int fx 20221214, returns df with time, area
 def numerical_int(int_var,ymd):
     date=datetime.datetime.strptime(str(ymd), '%Y%m%d')
 
@@ -130,9 +131,6 @@ def numerical_int(int_var,ymd):
 
     timelist=[x / 60 for x in timelist]
 
-    #plt.plot(timelist, arealist)
-    #plt.show()
-
     if int_var==" Wire-feed":
         df=pd.DataFrame(list(zip(timelist,arealist)),columns=['Time [h]','Wire used [m]'])
     else:
@@ -142,7 +140,7 @@ def numerical_int(int_var,ymd):
 
 
 
-
+#uptime or utilization graph input: ymd return: data frame with time, full day utilization, and first to last utilization
 def uptime_graph(ymd):
 
     df_meta= updata_df(1)
@@ -178,9 +176,6 @@ def uptime_graph(ymd):
 
             util_list.append(cur_time/24*100)
             util_first_last.append(cur_time/(timelist[-1]-timelist[0])*100)
-
-    #plt.plot(timelist, util_list)
-    #plt.show()
 
     df=pd.DataFrame(list(zip(timelist,util_list,util_first_last)),columns=['Time [h]','Utilization Rate Daily [%]','Utilization Rate [%]'])
 
