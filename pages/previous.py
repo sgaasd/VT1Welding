@@ -18,13 +18,9 @@ past_len=0
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
 df_meta=openfiles.updata_df(1)
-#df_meta=df_meta.iloc[0]
 
-#print(df_meta)
-#print(df_meta.iat[0,0])
 
 dropdown=dcc.Dropdown(openfiles.col_to_list(df_meta,'Test_number'),id='test_dropdown',style={ 'border-radius': '0px'})
-#'background-color': '#343434',
 dash.register_page(__name__)
 #Layout for page for looking at previous data
 layout=([

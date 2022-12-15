@@ -12,7 +12,6 @@ from datetime import date
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
 app = Dash(__name__,external_stylesheets=external_stylesheets,use_pages=True)
-#app = Dash(__name__)
 colors = {
     'background': '#343434',
     'text': '#f2f2f2',
@@ -28,6 +27,7 @@ df_meta=openfiles.updata_df(1)
 print(df_meta)
 print(df_meta.iat[0,0])
 
+#sets up the main layout and 
 app.layout= html.Div(className="content", children=[html.Div([dcc.Link(page['name']+" | ", href=page['path'])
 for page in dash.page_registry.values()],
 style={'text-align': 'right','margin-right':  '10px'}),
@@ -464,6 +464,7 @@ def update_value(value):
     Output('usage_graphs' , 'children'),
 
     Input('my-date-picker-single', 'date'))
+#updates the KPI page based on the date chosen
 def update_output(date_value):
     string_prefix = 'You have selected: '
     if date_value is not None:
