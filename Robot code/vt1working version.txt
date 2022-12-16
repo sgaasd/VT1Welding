@@ -1,0 +1,64 @@
+ Program
+   Robot Program
+     setup
+       open=socket_open("192.168.0.56",50000)
+       Loop open == False
+         open=socket_open("192.168.0.56",50000)
+       start_code≔[0,0]
+       act_current≔0
+       act_voltage≔0
+       act_wirefeed≔0
+       act_gasflow≔0
+       current≔""
+       voltage≔""
+       wirefeed≔""
+       gasflow≔""
+       continuous≔ True 
+       Startcollecting≔ False 
+     Loop continuous
+       Wait start_code[1]==1
+       MoveJ
+         Home_position1
+       MoveL
+         airpoint_start
+       MoveL
+         startpoint
+       socket_send_int(3)
+       Wait start_code[1]==2
+       Startcollecting= True 
+       MigaWeld
+         'MoveJ'
+         'Wait Start_button=HI'
+         SpeedSlider
+         WeldItem_1
+           Weld seam
+             'Airpoint'
+             Startpoint
+             Arc on
+             Paths:
+               Linear_1
+             Arc off
+             'Airpoint'
+         'MoveJ'
+       Startcollecting= False 
+       socket_send_int(4)
+       MoveL
+         airpoint_end
+       MoveJ
+         Waypoint_1
+   Thread_1
+     act_current=read_input_integer_register(5)
+     act_voltage=read_input_integer_register(6)
+     act_wirefeed=read_input_integer_register(22)
+     act_gasflow=read_input_integer_register(23)
+     start_code=socket_read_ascii_float(1)
+     If Startcollecting== True 
+       current=str_cat(to_str(act_current),",")
+       voltage=str_cat(to_str(act_voltage),",")
+       wirefeed=str_cat(to_str(act_wirefeed),",")
+       gasflow=str_cat(to_str(act_gasflow),",")
+       socket_send_string(str_cat(str_cat(current,voltage),str_cat(wirefeed,gasflow)))
+     If start_code[1]==5
+       continuous= False 
+       Halt
+     Wait: 0.01
