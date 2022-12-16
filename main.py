@@ -326,7 +326,8 @@ def data_exchange_with_cowelder():
                     if recieved_data == int.to_bytes(4,4,'big'):
                         connection.send((bytes('(0)', 'ascii')))
                         unix_time_end=datetime.now()
-                        unix_time_end=time.mktime(unix_time_end.timetuple())*1e3 + unix_time_end.microsecond/1e3
+                        unix_time_end=(time.mktime(unix_time_end.timetuple())*1e3 
+                        + unix_time_end.microsecond/1e3)
                         Micdata=Microphones.stoprec(Micdata)
                         video_getter.stop()
                         weldment_done = True  
