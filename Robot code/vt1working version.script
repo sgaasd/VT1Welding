@@ -1,0 +1,595 @@
+def vt1working_version():
+  global _hidden_verificationVariable=0
+  step_count_8f438bb6_2aea_4e4b_a851_510afe7db2c2 = 0.0
+  thread Step_Counter_Thread_1ffc4ce6_243a_4b7e_9479_ee118feb18a9():
+    while (True):
+      step_count_8f438bb6_2aea_4e4b_a851_510afe7db2c2 = step_count_8f438bb6_2aea_4e4b_a851_510afe7db2c2 + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_1ffc4ce6_243a_4b7e_9479_ee118feb18a9()
+  set_safety_mode_transition_hardness(0)
+  set_tcp(p[7.538058426760121E-4,-0.0024913856340683938,0.43856756466066044,-0.6235424343552158,-0.6000589821390423,-1.4503271540415017])
+  set_target_payload(3.000000, [0.006000, -0.066000, 0.225000], [0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000])
+  set_gravity([0.0, 0.0, 9.82])
+  rtde_set_watchdog("speed_slider_mask", 10.0, "pause")
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 1)
+  set_analog_outputdomain(1, 1)
+  set_input_actions_to_default()
+  set_tool_digital_input_action(0, "freedrive")
+  set_runstate_standard_digital_outputs([4])
+  set_runstate_configurable_digital_outputs([3])
+  set_runstate_standard_digital_output_to_value(4, 1)
+  set_runstate_configurable_digital_output_to_value(3, 1)
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(24)
+  global pos_1_reached=True
+  global velocity_value=0.2
+  global traj_start=True
+  global received=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  global time_value_2=0
+  global Arc_Lost=200
+  global acc_value=2
+  global acc_value_2=0.1
+  global vel=0
+  global buf_pos_2=p[0, 0, 0, 0, 0, 0]
+  global buf_pos_1=p[0, 0, 0, 0, 0, 0]
+  global motion_type_2=4
+  global has_pos_2=False
+  global has_pos_1=False
+  global Wire_Stick=False
+  global motion_type=4
+  global Weld_Flag=False
+  global blend_2=0
+  global blend_rad_value=0.005
+  global time_value=0.3642
+  global Act_Job_No=0
+  global aaaaaa=9999
+  global pos_2_reached=False
+  global Seqence_no=1
+  global lv=0
+  global no_points=0
+  global cycle_time_3=0
+  global cycle_time_2=0
+  global cycle_time_1=0
+  global Machine_Ready=True
+  global vel_value_2=0.0067
+  global prod_count=1
+  global Miga_Key_Lock=False
+  global varpos=p[0, 0, 0, 0, 0, 0]
+  global Act_Sequence_No=0
+  global welding=False
+  global Arc_Lost_Cnt=2
+  global Gas_Fault=False
+  global unit_counter=1
+  global Sequence_no=1
+  global hula=7
+  global Arc_Detect=False
+  global weld_has_start=False
+  global sock=True
+  global Job_no=1
+  global fltrrggr=[0, 0]
+  global SAFETY_1=p[-0.13729698859803377,-1.4001872545849114,0.32929118169461286,1.2087983385859107,-1.2096165874453475,1.209164211233332]
+  global SAFETY_2=p[-1.4001822826536137,0.13778153517976727,0.32915675607236555,-2.0411431647357137E-4,-1.570015341721679,2.1310575079201222E-4]
+  global SAFETY_3=p[1.4002074657939092,-0.13802277766533816,0.3291314663365173,2.220227018065893,-0.001365427796318636,2.222347007311856]
+  global SAFETY_4=p[-0.2769443562676679,0.3693640336675746,0.32897432104115887,-1.209086902549316,-1.2089163127206357,-1.2092830743556302]
+  # begin: URCap Installation Node
+  #   Source: Migaweld, 3.1.0, Smooth Robotics ApS
+  #   Type: MigaWeld Configuration
+  write_output_boolean_register(0,False)
+  global Miga_Arc_Detect = False
+  global Miga_Wire_Stick = False
+  global Miga_Monitor_Wire_Stick = True
+  global Miga_Gas_Fault = False
+  global Miga_Machine_Ready = False
+  global Miga_runCommThread = False
+  global Miga_runParamThread = False
+  global Miga_Weld_Flag = False
+  global Miga_Arc_Lost = 25
+  global Miga_Arc_Lost_Cnt = 0
+  global Miga_Arc_Start_Timeout = 5.0
+  global Miga_Arc_Start_Timeout_Cnt = 0
+  global Miga_PowerSupply_Lost = 1000
+  global Miga_unit_counter = 0
+  global Miga_prod_count = 0
+  global Miga_Initializing_Arc = False
+  global Miga_SpeedSlider_Low = False
+  global Miga_Retries_Counter = 0
+  global Miga_Retries = 0
+  global Miga_disableKeyLock = False
+  global Miga_WeldParameter_inside_welding = False
+  set_standard_digital_out(0, False)
+  def Miga_ArcOn(waitTime):
+  if not(Miga_runCommThread):
+    Miga_runCommThread = True
+  end
+  if (((get_standard_digital_in(2) == True ) and (Miga_Machine_Ready == False))):
+      popup("Error on welding machine", "Error", False, True, blocking=True)
+  end
+  if (((get_standard_digital_in(2) == True ) and (Miga_Gas_Fault == True ))):
+      popup("Error Gas", "Message", False, False, blocking=True)
+  end
+  global Miga_Weld_Flag = True
+  global Miga_Initializing_Arc = True
+  if (get_standard_digital_in(2) == True):
+    while (not(Miga_Arc_Detect == True )):
+      sync()
+    end
+  end
+  sleep(waitTime)
+  end
+  def Miga_ArcOff(waitTime):
+  global Miga_Weld_Flag =  False
+  while(Miga_Arc_Detect == True):
+    sync()
+  end
+  sleep(waitTime)
+  if (Miga_Wire_Stick and Miga_Monitor_Wire_Stick):
+    set_standard_digital_out(0, False)
+    set_standard_digital_out(6, False)
+      popup("Wire burned", "Warning", True, False, blocking=False)
+      halt
+  end
+  if (Miga_runCommThread):
+    Miga_runCommThread = False
+  end
+  end
+  socket_connected = socket_open("127.0.0.1", 30002, "socket_speedSlider")
+  while (not(socket_connected)):
+    socket_connected = socket_open("127.0.0.1", 30002, "socket_speedSlider")
+  end
+  global Miga_Job_No = 0
+  global Miga_Sequence_No = 0
+  global Miga_Act_Job_No = 0
+  global Miga_Act_Sequence_No = 0
+  global Miga_Weld_Prg = 112
+  global Miga_Weld_Process = 1
+  global Miga_Weld_Current = 0
+  global Miga_Weld_Voltage = 0
+  global Miga_Duo_Plus = False
+  global Miga_Tack_Welding = False
+  global Miga_Act_Weld_Prg = 112
+  global Miga_Act_Weld_Process = 1
+  global Miga_Act_Duo_Plus = False
+  global Miga_jobSelected = True
+  def Miga_KeyLock_Job():
+    write_output_boolean_register(0,True)
+    set_standard_digital_out(7,False)
+    global Miga_PowerSupply_Lost_Cnt = 0
+    global Miga_Act_Job_No = read_input_integer_register(0)
+    JOB_CHANGED = (Miga_Act_Job_No != Miga_Job_No)
+    write_output_integer_register(1,0)
+    write_output_integer_register(0,0)
+    sleep(0)
+    write_output_integer_register(0,Miga_Job_No)
+    if (not Miga_WeldParameter_inside_welding):
+      if (JOB_CHANGED):
+        sleep(2)
+      else:
+        sleep(0.1)
+      end
+    end
+    write_output_integer_register(1,0)
+    sleep(0)
+    write_output_integer_register(1,Miga_Sequence_No)
+    sleep(0)
+    sleep(0.02)
+    write_output_boolean_register(0,False)
+    if (not Miga_WeldParameter_inside_welding):
+      sleep(1.0)
+      Miga_Act_Job_No = read_input_integer_register(0)
+      if (Miga_Act_Job_No != Miga_Job_No):
+        set_standard_digital_out(0, False)
+        set_standard_digital_out(6, False)
+        popup("Power supply could not set desired valuesJob mode: Job no", "Message", False, False, blocking=False)
+        halt
+      end
+      Miga_Act_Sequence_No = read_input_integer_register(1)
+      if (Miga_Act_Sequence_No != Miga_Sequence_No):
+        set_standard_digital_out(0, False)
+        set_standard_digital_out(6, False)
+        popup("Power supply could not set desired valuesJob mode: Sequence", "Message", False, False, blocking=False)
+        halt
+      end
+    end
+  end
+  def Miga_KeyLock_Process():
+    write_output_boolean_register(0,True)
+    global Miga_PowerSupply_Lost_Cnt = 0
+    global Miga_Act_Job_No = read_input_integer_register(0)
+    JOB_CHANGED = (Miga_Act_Job_No != Miga_Job_No)
+    write_output_integer_register(1,0)
+    write_output_integer_register(0,0)
+    sleep(0)
+    write_output_integer_register(0,Miga_Job_No)
+    global Miga_Act_Weld_Prg = read_input_integer_register(2)
+    PROGRAM_CHANGED = (Miga_Act_Weld_Prg != Miga_Weld_Prg)
+    write_output_integer_register(2,0)
+    sleep(0)
+    write_output_integer_register(2,Miga_Weld_Prg)
+    write_output_integer_register(1,0)
+    sleep(0)
+    write_output_integer_register(1,Miga_Sequence_No)
+    if (not Miga_WeldParameter_inside_welding):
+      if (JOB_CHANGED or PROGRAM_CHANGED):
+        sleep(2)
+      else:
+        sleep(0.1)
+      end
+    end
+    write_output_integer_register(3,0)
+    sleep(0)
+    write_output_integer_register(3,Miga_Weld_Process)
+    set_standard_digital_out(7,not Miga_Tack_Welding)
+    sleep(0)
+    set_standard_digital_out(7,Miga_Tack_Welding)
+    write_output_boolean_register(2,not Miga_Duo_Plus)
+    sleep(0)
+    write_output_boolean_register(2,Miga_Duo_Plus)
+    write_output_integer_register(5,0)
+    sleep(0)
+    write_output_integer_register(5,Miga_Weld_Current)
+    write_output_integer_register(6,0)
+    sleep(0)
+    write_output_integer_register(6,Miga_Weld_Voltage)
+    write_output_integer_register(5,0)
+    sleep(0)
+    write_output_integer_register(5,Miga_Weld_Current)
+    write_output_integer_register(6,0)
+    sleep(0)
+    write_output_integer_register(6,Miga_Weld_Voltage)
+    sleep(0.02)
+    write_output_boolean_register(0,False)
+    if (not Miga_WeldParameter_inside_welding):
+      sleep(1.0)
+      Miga_Act_Job_No = read_input_integer_register(0)
+      if (Miga_Act_Job_No != Miga_Job_No):
+        set_standard_digital_out(0, False)
+        set_standard_digital_out(6, False)
+        popup("Power supply could not set desired values Job no", "Message", False, False, blocking=False)
+        halt
+      end
+      Miga_Act_Weld_Prg = read_input_integer_register(2)
+      if (Miga_Act_Weld_Prg != Miga_Weld_Prg):
+        set_standard_digital_out(0, False)
+        set_standard_digital_out(6, False)
+        popup("Power supply could not set desired values Weld Program", "Message", False, False, blocking=False)
+        halt
+      end
+      Miga_Act_Sequence_No = read_input_integer_register(1)
+      if (Miga_Act_Sequence_No != Miga_Sequence_No):
+        set_standard_digital_out(0, False)
+        set_standard_digital_out(6, False)
+        popup("Power supply could not set desired values Sequence no", "Message", False, False, blocking=False)
+        halt
+      end
+      Miga_Act_Weld_Process = read_input_integer_register(3)
+      if (Miga_Act_Weld_Process != Miga_Weld_Process):
+        set_standard_digital_out(0, False)
+        set_standard_digital_out(6, False)
+        popup("Power supply could not set desired values Weld process", "Message", False, False, blocking=False)
+        halt
+      end
+      Miga_Act_Duo_Plus = read_input_boolean_register(6)
+      if (Miga_Act_Duo_Plus != Miga_Duo_Plus):
+        set_standard_digital_out(0, False)
+        set_standard_digital_out(6, False)
+        popup("Power supply could not set desired values Duo Plus", "Message", False, False, blocking=False)
+        halt
+      end
+    end
+  end
+  def MigaComm():
+    if (get_standard_digital_out(4) == False):
+      global Miga_Arc_Lost_Cnt = 0
+      global Miga_Arc_Start_Timeout_Cnt = 0
+    end
+    if ((get_standard_digital_out(0) ==   True  )  and  (Miga_Arc_Detect ==   True  )):
+      if (Miga_SpeedSlider_Low == True):
+        socket_send_string("set speed",  "socket_speedSlider")
+        socket_send_string("1.0",  "socket_speedSlider")
+        socket_send_byte(10,  "socket_speedSlider")
+        global Miga_SpeedSlider_Low = False
+      end
+      global Miga_Arc_Lost_Cnt = 0
+      global Miga_Arc_Start_Timeout_Cnt = 0
+      global Miga_Initializing_Arc = False
+    end
+    if ((get_standard_digital_out(0) == True) and (Miga_Arc_Detect == False)):
+      if (Miga_Initializing_Arc == False):
+        global Miga_Arc_Lost_Cnt = Miga_Arc_Lost_Cnt+1
+      else:
+        global Miga_Arc_Start_Timeout_Cnt = Miga_Arc_Start_Timeout_Cnt+get_steptime()
+      end
+    end
+    if (get_standard_digital_out(0) == False):
+      global Miga_Arc_Lost_Cnt = 0
+      global Miga_Arc_Start_Timeout_Cnt = 0
+    end
+    if (Miga_Arc_Lost_Cnt>Miga_Arc_Lost):
+      set_standard_digital_out(0,False)
+      global Miga_Arc_Lost_Cnt = 0
+      global Miga_Arc_Start_Timeout_Cnt = 0
+      global Miga_Initializing_Arc = True
+      socket_send_string("set speed",  "socket_speedSlider")
+      socket_send_string("0.02",  "socket_speedSlider")
+      socket_send_byte(10,  "socket_speedSlider")
+      global Miga_SpeedSlider_Low = True
+      set_configurable_digital_out(3, True)
+      sleep(1.0)
+    end
+    if (Miga_Arc_Start_Timeout_Cnt>Miga_Arc_Start_Timeout):
+      set_standard_digital_out(0, False)
+      if (Miga_Retries_Counter<Miga_Retries):
+        sleep(1.0)
+        set_standard_digital_out(6, True)
+        sleep(2.0)
+        set_standard_digital_out(6, False)
+        global Miga_Retries_Counter = Miga_Retries_Counter+1
+        global Miga_Arc_Start_Timeout_Cnt = 0
+        global Miga_Initializing_Arc = True
+        sleep(1.0)
+      else:
+        global Miga_Arc_Start_Timeout_Cnt = 0
+        global Miga_Initializing_Arc = True
+        global Miga_Retries_Counter = 0
+        set_standard_digital_out(0, False)
+        set_configurable_digital_out(3, True)
+        sleep(1.0)
+      end
+    end
+    if (Miga_Weld_Flag and get_standard_digital_in(2)):
+      set_standard_digital_out(0, True)
+    end
+    if (not  Miga_Weld_Flag or not get_standard_digital_in(2)):
+      set_standard_digital_out(0, False)
+    end
+    set_standard_digital_out(4,True)
+    global Miga_Arc_Detect = read_input_boolean_register(0)
+    global Miga_Wire_Stick = read_input_boolean_register(1)
+    global Miga_Gas_Fault = read_input_boolean_register(2)
+    global Miga_Machine_Ready = read_input_boolean_register(3)
+    sync()
+  end
+  thread MigaCommThread():
+    while (True):
+      if (Miga_runCommThread):
+        MigaComm()
+      else:
+        sync()
+      end
+    end
+  end
+  threadId_MigaCommThread = run MigaCommThread()
+  thread MigaParamThread():
+    while (True):
+      if (Miga_runParamThread):
+        if (Miga_jobSelected):
+          Miga_KeyLock_Job()
+        else:
+          Miga_KeyLock_Process()
+        end
+        Miga_runParamThread = False
+      else:
+        sync()
+      end
+    end
+  end
+  threadId_MigaParamThread = run MigaParamThread()
+  thread MigaKeyLockThread():
+    while (True):
+      if (Miga_disableKeyLock):
+        sleep(2.0)
+        write_output_boolean_register(0,False)
+        Miga_disableKeyLock = False
+      else:
+        sync()
+      end
+    end
+  end
+  threadId_MigaKeyLockThread = run MigaKeyLockThread()
+  def modulus(a,b):
+    if (a == 0):
+        return -1
+    end
+    return (a - floor(a/b) * b)
+  end
+  def getTPose(pose):
+    return p[pose[0], pose[1], pose[2], 0, 0, 0]
+  end
+  def getRPose(pose):
+    return p[0,0,0,pose[3], pose[4], pose[5]]
+  end
+  # end: URCap Installation Node
+  global Home_position1_p=p[-.028623020377, -.858474401629, .620531168554, .015557921824, 2.986057096849, -.659318125833]
+  global Home_position1_q=[-1.4009507338153284, -1.7717157802977503, -1.560290813446045, -0.9384482663920899, 1.5824182033538818, 0.1832726001739502]
+  global airpoint_start_p=p[-.005040592043, -.927433591318, .124466142917, -1.768651256624, 1.842294606015, .739765832780]
+  global airpoint_start_q=[-1.361617390309469, -1.8976031742491664, -1.4006868600845337, -1.3729949456504364, 1.536616325378418, 0.20207075774669647]
+  global startpoint_p=p[-.004822055663, -.898200333657, .093048870612, -1.701966871493, 1.829261624994, .767664758344]
+  global startpoint_q=[-1.3617914358722132, -1.9054743252196253, -1.4332627058029175, -1.3851054322770615, 1.5484119653701782, 0.23429980874061584]
+  global airpoint_end_p=p[-.185501024206, -.954485155102, .144332698921, -1.819907499091, 1.904826262082, .682279333029]
+  global airpoint_end_q=[-1.5574758688556116, -1.8913208446898402, -1.4010772705078125, -1.2888702017119904, 1.5343589782714844, 0.005459261126816273]
+  global Waypoint_1_p=p[-.185500636213, -.983434142390, .188424978012, -1.819952977924, 1.904820694549, .682203431333]
+  global Waypoint_1_q=[-1.5579360167132776, -1.9321543178954066, -1.267967700958252, -1.381064460878708, 1.5346113443374634, 0.004613041877746582]
+  $ 50 "Thread_1"
+  thread Thread_1():
+    while (True):
+      $ 51 "act_current=read_input_integer_register(5)"
+      act_current=read_input_integer_register(5)
+      $ 52 "act_voltage=read_input_integer_register(6)"
+      act_voltage=read_input_integer_register(6)
+      $ 53 "act_wirefeed=read_input_integer_register(22)"
+      act_wirefeed=read_input_integer_register(22)
+      $ 54 "act_gasflow=read_input_integer_register(23)"
+      act_gasflow=read_input_integer_register(23)
+      $ 55 "start_code=socket_read_ascii_float(1)"
+      start_code=socket_read_ascii_float(1)
+      $ 56 "If Startcollecting== True "
+      global thread_flag_56=0
+      thread Thread_if_56():
+        $ 57 "current=str_cat(to_str(act_current),',')"
+        current=str_cat(to_str(act_current),",")
+        $ 58 "voltage=str_cat(to_str(act_voltage),',')"
+        voltage=str_cat(to_str(act_voltage),",")
+        $ 59 "wirefeed=str_cat(to_str(act_wirefeed),',')"
+        wirefeed=str_cat(to_str(act_wirefeed),",")
+        $ 60 "gasflow=str_cat(to_str(act_gasflow),',')"
+        gasflow=str_cat(to_str(act_gasflow),",")
+        $ 61 "socket_send_string(str_cat(str_cat(current,voltage),str_cat(wirefeed,gasflow)))"
+        socket_send_string(str_cat(str_cat(current,voltage),str_cat(wirefeed,gasflow)))
+        thread_flag_56 = 1
+      end
+      if (Startcollecting==  True  ):
+        global thread_handler_56=run Thread_if_56()
+        while (thread_flag_56 == 0):
+          if not(Startcollecting==  True  ):
+            kill thread_handler_56
+            thread_flag_56 = 2
+          else:
+            sync()
+          end
+        end
+      else:
+        thread_flag_56 = 2
+      end
+      $ 62 "If start_code[1]==5"
+      if (start_code[1]==5):
+        $ 63 "continuous= False "
+        continuous=  False
+        $ 64 "Halt"
+        halt
+      end
+      $ 65 "Wait: 0.01"
+      sleep(0.01)
+    end
+  end
+  threadId_Thread_1 = run Thread_1()
+  $ 1 "Robot Program"
+  $ 2 "setup"
+  $ 3 "open=socket_open('192.168.0.56',50000)"
+  open=socket_open("192.168.0.56",50000)
+  $ 4 "Loop open == False"
+  while (open == False):
+    $ 5 "open=socket_open('192.168.0.56',50000)"
+    open=socket_open("192.168.0.56",50000)
+  end
+  $ 6 "start_code≔[0,0]"
+  global start_code=[0,0]
+  $ 7 "act_current≔0"
+  global act_current=0
+  $ 8 "act_voltage≔0"
+  global act_voltage=0
+  $ 9 "act_wirefeed≔0"
+  global act_wirefeed=0
+  $ 10 "act_gasflow≔0"
+  global act_gasflow=0
+  $ 11 "current≔''"
+  global current=""
+  $ 12 "voltage≔''"
+  global voltage=""
+  $ 13 "wirefeed≔''"
+  global wirefeed=""
+  $ 14 "gasflow≔''"
+  global gasflow=""
+  $ 15 "continuous≔ True "
+  global continuous=  True  
+  $ 16 "Startcollecting≔ False "
+  global Startcollecting=  False  
+  $ 17 "Loop continuous"
+  while (continuous):
+    $ 18 "Wait start_code[1]==1"
+    while (not(start_code[1]==1)):
+      sync()
+    end
+    $ 19 "MoveJ"
+    $ 20 "Home_position1" "breakAfter"
+    movej(get_inverse_kin(pose_trans(Home_position1_p, get_tcp_offset()), qnear=Home_position1_q), a=1.3962634015954636, v=1.0471975511965976)
+    $ 21 "MoveL"
+    $ 22 "airpoint_start" "breakAfter"
+    movel(airpoint_start_p, a=1.2, v=0.25)
+    $ 23 "MoveL"
+    $ 24 "startpoint" "breakAfter"
+    movel(startpoint_p, a=1.2, v=0.25)
+    $ 25 "socket_send_int(3)"
+    socket_send_int(3)
+    $ 26 "Wait start_code[1]==2"
+    while (not(start_code[1]==2)):
+      sync()
+    end
+    $ 27 "Startcollecting= True "
+    Startcollecting=  True
+    # begin: URCap Program Node
+    #   Source: Migaweld, 3.1.0, Smooth Robotics ApS
+    #   Type: MigaWeld
+    $ 28 "MigaWeld"
+    Miga_runCommThread = True
+    global StartFromHome = True
+    # begin: URCap Program Node
+    #   Source: Migaweld, 3.1.0, Smooth Robotics ApS
+    #   Type: SpeedSlider
+    $ 32 "SpeedSlider" "noBreak"
+    socket_send_string("set speed",  "socket_speedSlider")
+    socket_send_string("1.0",  "socket_speedSlider")
+    socket_send_byte(10,  "socket_speedSlider")
+    # end: URCap Program Node
+    # begin: URCap Program Node
+    #   Source: Migapath, 3.1.0, Smooth Robotics ApS
+    #   Type: WeldItem
+    $ 33 "WeldItem_1" "noBreak"
+    # begin: URCap Program Node
+    #   Source: Migapath, 3.1.0, Smooth Robotics ApS
+    #   Type: Weld seam
+    $ 34 "Weld seam" "noBreak"
+    # begin: URCap Program Node
+    #   Source: Migapath, 3.1.0, Smooth Robotics ApS
+    #   Type: AirPoint
+    $ 36 "Startpoint" "noBreak"
+    movej(get_inverse_kin(p[-0.004871362195185372, -0.898178949324387, 0.09309690001394466, -1.7019119022448117, 1.8293213367230567, 0.767653967336015], [-1.3618088167999929,-1.9054482581582661,-1.43326229705675,-1.3851192141433897,1.548435595648999,0.2342900042363874]), 1.3962634015954636, 1.0471975511965976, 0,0.0)
+    StartFromHome = True
+    # end: URCap Program Node
+    # begin: URCap Program Node
+    #   Source: Migaweld, 3.1.0, Smooth Robotics ApS
+    #   Type: Arc On
+    $ 37 "Arc on" "noBreak"
+    Miga_ArcOn(0.0)
+    # end: URCap Program Node
+    # begin: URCap Program Node
+    #   Source: Migapath, 3.1.0, Smooth Robotics ApS
+    #   Type: Paths:
+    $ 38 "Paths:" "noBreak"
+    # begin: URCap Program Node
+    #   Source: Migapath, 3.1.0, Smooth Robotics ApS
+    #   Type: Welding path
+    $ 39 "Linear_1" "noBreak"
+    movep(p[-0.18759827422859285, -0.8915794770509936, 0.09334394964479881, -1.702118656917588, 1.8292457284986108, 0.767532708737317], 0.6, 0.006, 0.001)
+    # end: URCap Program Node
+    # end: URCap Program Node
+    # begin: URCap Program Node
+    #   Source: Migaweld, 3.1.0, Smooth Robotics ApS
+    #   Type: Arc Off
+    $ 40 "Arc off" "noBreak"
+    Miga_ArcOff(0.5)
+    # end: URCap Program Node
+    # end: URCap Program Node
+    # end: URCap Program Node
+    Miga_runCommThread = False
+    # end: URCap Program Node
+    $ 44 "Startcollecting= False "
+    Startcollecting=  False
+    $ 45 "socket_send_int(4)"
+    socket_send_int(4)
+    $ 46 "MoveL"
+    $ 47 "airpoint_end" "breakAfter"
+    movel(airpoint_end_p, a=1.2, v=0.25)
+    $ 48 "MoveJ"
+    $ 49 "Waypoint_1" "breakAfter"
+    movej(get_inverse_kin(Waypoint_1_p, qnear=Waypoint_1_q), a=1.3962634015954636, v=1.0471975511965976)
+  end
+end
