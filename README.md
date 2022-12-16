@@ -8,17 +8,15 @@
 
 
 ## Table of content
-[Where to find things](#where-to-find-things)<br/>
-* [Installation](#Instalation)<br/>
-* [Launch files](#launch-files)<br/>
-* [Image data](#image-data)<br/>
+[Installation guide](#Installation)<br/>
+[Launch Dashboard](#Dashboard)<br/>
+[Launch data acquisition pipeline](#DataAcquisition)<br/>
 
 
 
 ## Intallation
 ```
 pip install -r requirements.txt
-
 ```
 
 
@@ -35,5 +33,6 @@ On the previous page use the dropdown menu to choose which results to visualise
 
 On the KPI page use the calendar to choose which day you would like to see the KPIs for
 
+```
 
-´´´
+## Data acquisition pipeline
