@@ -1,6 +1,21 @@
 # VT1Welding123
 
-## Intall dependencies
+## Overview:
+[![License](https://img.shields.io/github/license//sgaasd/VT1Welding)](https://github.com//sgaasd/VT1Welding)
+[![Github code size](https://img.shields.io/github/languages/code-size//sgaasd/VT1Welding)](https://github.com//sgaasd/VT1Welding)
+[![Github issue tracker](https://img.shields.io/github/issues//sgaasd/VT1Welding)](https://github.com//sgaasd/VT1Welding)
+[![Commit activity](https://img.shields.io/github/commit-activity/w//sgaasd/VT1Welding)](https://github.com//sgaasd/VT1Welding)
+
+
+## Table of content
+[Where to find things](#where-to-find-things)<br/>
+* [Installation](#Instalation)<br/>
+* [Launch files](#launch-files)<br/>
+* [Image data](#image-data)<br/>
+
+
+
+## Intallation
 ```
 pip install -r requirements.txt
 
