@@ -91,7 +91,9 @@ def new_measure_check(previous,list_to_check):
     else:
         return False, now
 
-#numarical integration input: int_var: the integrated variable either " Wire-feed" or " Gas-flow" ymd: the date as int fx 20221214, returns df with time, area
+#numarical integration input: 
+# int_var: the integrated variable either " Wire-feed" or " Gas-flow" 
+# ymd: the date as int fx 20221214, returns df with time, area
 def numerical_int(int_var,ymd):
     date=datetime.datetime.strptime(str(ymd), '%Y%m%d')
 
@@ -139,7 +141,9 @@ def numerical_int(int_var,ymd):
 
 
 
-#uptime or utilization graph input: ymd return: data frame with time, full day utilization, and first to last utilization
+#uptime or utilization graph 
+# input: ymd 
+# return: data frame with time, full day utilization, and first to last utilization
 def uptime_graph(ymd):
 
     df_meta= updata_df(1)
@@ -176,7 +180,8 @@ def uptime_graph(ymd):
             util_list.append(cur_time/24*100)
             util_first_last.append(cur_time/(timelist[-1]-timelist[0])*100)
 
-    df=pd.DataFrame(list(zip(timelist,util_list,util_first_last)),columns=['Time [h]','Utilization Rate Daily [%]','Utilization Rate [%]'])
+    df=pd.DataFrame(list(zip(timelist,util_list,util_first_last)),columns=['Time [h]',
+    'Utilization Rate Daily [%]','Utilization Rate [%]'])
 
     return df
 
