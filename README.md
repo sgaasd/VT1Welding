@@ -26,9 +26,7 @@ In root directory run
 ```
 Dashboard.py
 ```
-To view the page open the following link 
-
-[http://127.0.0.1:8050](http://127.0.0.1:8050)
+To view the page open the following link: [http://127.0.0.1:8050](http://127.0.0.1:8050)
 
 The Dashbboard will automatically open the live page showing the most recent results.
 
