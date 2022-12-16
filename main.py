@@ -90,7 +90,8 @@ def tocontinue():
 
 current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=0,0,0,0,0,0,0
 df_last_setting=0
-#function for inputting the metadata that cant be collected automatically, and also where a describtion of the test can be written
+#function for inputting the metadata that cant be collected automatically,
+#  and also where a describtion of the test can be written
 def meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df):
     if t_horizontal==0:
         input_var="y"
@@ -225,11 +226,17 @@ def comment_data():
     return test_result,notes
 
 #saves all the meta data needed
-def save_meta(test_nb,start_t,end_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes):
+def save_meta(test_nb,start_t,end_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,
+path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes):
+
     today= datetime.today()
     test_name=today.strftime('%Y%m%d')
-    list_of_inf=[[test_nb,test_name,start_t,end_t,sample_rate_weld,sample_rate_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes]]
-    df_of_inf=pd.DataFrame(list_of_inf,columns=['Test_number','Date_y_m_d','Start_time_[unix_ms]','End_time_[unix_ms]','Sample_rate_weld[Hz]','Sample_rate_sound[Hz]','Rating','Path_sound','Path_weld','Path_video','Thickness_hor[mm]','Thickness_ver[mm]','Current[A*10]','Voltage[V*10]','Wire_feed[m/min]','Gas_flow[L/min]','Describtion','Notes'])
+    list_of_inf=[[test_nb,test_name,start_t,end_t,sample_rate_weld,sample_rate_sound,test_result,
+    path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes]]
+
+    df_of_inf=pd.DataFrame(list_of_inf,columns=['Test_number','Date_y_m_d','Start_time_[unix_ms]','End_time_[unix_ms]',
+    'Sample_rate_weld[Hz]','Sample_rate_sound[Hz]','Rating','Path_sound','Path_weld','Path_video','Thickness_hor[mm]',
+    'Thickness_ver[mm]','Current[A*10]','Voltage[V*10]','Wire_feed[m/min]','Gas_flow[L/min]','Describtion','Notes'])
     
 
     data_dir="Data/"
@@ -240,7 +247,10 @@ def save_meta(test_nb,start_t,end_t,sample_rate_weld,sample_rate_sound,test_resu
 
     df_param=pd.read_csv("Data/meta/00_semi_constant_param.csv",sep=',')
     df_of_inf = pd.concat([df_of_inf, df_param], ignore_index=True,axis=1, join='inner')
-    df_of_inf.columns = ['Test_number','Date_y_m_d','Start_time_[unix_ms]','End_time_[unix_ms]','Sample_rate_weld[Hz]','Sample_rate_sound[Hz]','Rating','Path_sound','Path_weld','Path_video','Thickness_hor[mm]','Thickness_ver[mm]','Current[A*10]','Voltage[V*10]','Wire_feed[m/min]','Gas_flow[L/min]','Describtion','Notes','Material','Gas_type','Electrode','Travel_speed[m/min]','Electrode_d[mm]','Wire_stictout[mm]','Gun_angle','Worker_angle','Length']
+    df_of_inf.columns = ['Test_number','Date_y_m_d','Start_time_[unix_ms]','End_time_[unix_ms]','Sample_rate_weld[Hz]',
+    'Sample_rate_sound[Hz]','Rating','Path_sound','Path_weld','Path_video','Thickness_hor[mm]','Thickness_ver[mm]','Current[A*10]',
+    'Voltage[V*10]','Wire_feed[m/min]','Gas_flow[L/min]','Describtion','Notes','Material','Gas_type','Electrode','Travel_speed[m/min]',
+    'Electrode_d[mm]','Wire_stictout[mm]','Gun_angle','Worker_angle','Length']
     df = df.append(df_of_inf, ignore_index = True)
     print("saving data")
     
@@ -287,7 +297,9 @@ def data_exchange_with_cowelder():
                 path_video='Data/cam/'+test_name
                 initiate = False
                 video_getter = VideoGet(1)
-            current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df_last_setting)
+            current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,
+                                    wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df_last_setting)
+
             initiate_go_signal = input("Type 'start' to initiate program: ")
             welding_data_list = ["Current, Voltage, Wire-feed, Gas-flow"]
             if initiate_go_signal == "start": #start signal moves the robot down to airpointstart
@@ -297,13 +309,15 @@ def data_exchange_with_cowelder():
                     if recieved_data == int.to_bytes(3,4,'big'):
                         welding_tip_in_position = True
                         initiate_weld_signal = input("Type 'weld' to start welding: ")
-            if initiate_weld_signal == "weld" and welding_tip_in_position == True: #Starts the arc on the robot and the welding process
+            #Starts the arc on the robot and the welding process
+            if initiate_weld_signal == "weld" and welding_tip_in_position == True: 
                 initiate_go_signal = "NULL"
                 Micdata=Microphones.CallMic(60,16000)
                 video_getter.start()
                 connection.send((bytes('(2)', 'ascii')))
                 unix_time_start=datetime.now()
-                unix_time_start=time.mktime(unix_time_start.timetuple())*1e3 + unix_time_start.microsecond/1e3
+                unix_time_start=(time.mktime(unix_time_start.timetuple())*1e3 
+                + unix_time_start.microsecond/1e3)
 
                 while weldment_done == False: 
                     connection.send((bytes('(2)', 'ascii')))
@@ -327,7 +341,8 @@ def data_exchange_with_cowelder():
                 welding_data_dataframe = welding_data_dataframe[0].str.split(',',expand=True)
                 new_header = welding_data_dataframe.iloc[0] #grab the first row for the headery
                 welding_data_dataframe = welding_data_dataframe[1:] #take the data less the header row
-                welding_data_dataframe.columns = new_header #set the header row as the welding_data_dataframe header
+                #set the header row as the welding_data_dataframe header
+                welding_data_dataframe.columns = new_header 
                 lst=np.linspace(unix_time_start,unix_time_end,len(welding_data_dataframe.index))
                 welding_data_dataframe['time [s]']=lst
 
@@ -344,7 +359,10 @@ def data_exchange_with_cowelder():
                 test_result,notes=comment_data()
                 path_weld=save_data("weld", data=welding_data_dataframe, rating=test_result)
                 path_sound=save_data("sound", data=mic_df, rating=test_result)
-                df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
+                df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,
+                path_sound,path_weld,path_video,t_horizontal,t_vertical,
+                current,voltage,wirefeed,gas_flow,discribtion,notes)
+
                 weldment_done = False
 
             if input("Continue to weld another piece press 'y' | shutdown press 'n': ") == "n":
@@ -381,7 +399,9 @@ def data_exchange_with_cowelder():
         test_result,notes=comment_data()
         path_weld=save_data("weld", data=welding_data_dataframe, rating=test_result)
         path_sound=save_data("sound", data=mic_df, rating=test_result)
-        df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,path_sound,path_weld,path_video,t_horizontal,t_vertical,current,voltage,wirefeed,gas_flow,discribtion,notes)
+        df_last_settings=save_meta(number,unix_time_start,unix_time_end,Hz_weld,Hz_sound,test_result,
+        path_sound,path_weld,path_video,t_horizontal,t_vertical,
+        current,voltage,wirefeed,gas_flow,discribtion,notes)
         connection.close()
         
 

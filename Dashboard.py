@@ -28,7 +28,8 @@ print(df_meta)
 print(df_meta.iat[0,0])
 
 #sets up the main layout and 
-app.layout= html.Div(className="content", children=[html.Div([dcc.Link(page['name']+" | ", href=page['path'])
+app.layout= html.Div(className="content", 
+children=[html.Div([dcc.Link(page['name']+" | ", href=page['path'])
 for page in dash.page_registry.values()],
 style={'text-align': 'right','margin-right':  '10px'}),
 
@@ -36,7 +37,9 @@ dash.page_container
 
 ])
 
-@app.callback(Output('left_menu', 'children'),Output('meta_dat', 'children'),Output('bottem_right_menu', 'children'),Output('determine_update','data'),Input('update_interval','n_intervals'),Input('determine_update','data'))
+@app.callback(Output('left_menu', 'children'),Output('meta_dat', 'children'),
+Output('bottem_right_menu', 'children'),Output('determine_update','data'),
+Input('update_interval','n_intervals'),Input('determine_update','data'))
 ##used for updating figures on the live page
 def update_figs_live(n,past_len):
     df_meta=openfiles.updata_df(1)
@@ -148,7 +151,8 @@ def update_figs_live(n,past_len):
         )
         
         left_content=[
-        html.H1('Data Visualisation of Robotic Welding',style={'margin-top':   '5px','margin-left':  '10px'}),
+        html.H1('Data Visualisation of Robotic Welding',
+        style={'margin-top':   '5px','margin-left':  '10px'}),
         #html.Hr(style={'width': '95%'}),
         dcc.Graph(
         id='graph-vol',
@@ -169,19 +173,23 @@ def update_figs_live(n,past_len):
         bottom_right_content=[html.H3(' Microphone data'),
             dcc.Graph(
                 id='graph-ch1',
-                figure=fig_ch1,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem',}
+                figure=fig_ch1,style={'width': '100%', 'height': '19.9vh',
+                'text-align': 'center','padding':'0rem',}
             ),
             dcc.Graph(
                 id='graph-ch2',
-                figure=fig_ch2,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+                figure=fig_ch2,style={'width': '100%', 'height': '19.9vh',
+                'text-align': 'center','padding':'0rem'}
             ),
             dcc.Graph(
                 id='graph-ch3',
-                figure=fig_ch3,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+                figure=fig_ch3,style={'width': '100%', 'height': '19.9vh',
+                'text-align': 'center','padding':'0rem'}
             ),
             dcc.Graph(
                 id='graph-ch4',
-                figure=fig_ch4,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+                figure=fig_ch4,style={'width': '100%', 'height': '19.9vh',
+                'text-align': 'center','padding':'0rem'}
             )
         ]
 
@@ -247,7 +255,8 @@ def update_figs_live(n,past_len):
         return no_update,no_update,no_update, no_update ##be sure this works with new data added!!!
         #dash.exceptions.PreventUpdate
 
-@app.callback(Output('test_dropdown','options'),Output('determine_update_drop','data'),Input('update_dropdown','n_intervals'),Input('determine_update_drop','data'))
+@app.callback(Output('test_dropdown','options'),Output('determine_update_drop','data'),
+Input('update_dropdown','n_intervals'),Input('determine_update_drop','data'))
 #updates the dropdown menu every time there is new data
 def update_drop_live(n,past_len):
     if n==0:
@@ -260,7 +269,9 @@ def update_drop_live(n,past_len):
     return no_update,past_len
 
 
-@app.callback(Output('meta_dat2', 'children'),Output('drop_value','data'),Output('weld_drop', 'children'),Output('mic_drop', 'children'),Input('test_dropdown','value'))
+@app.callback(Output('meta_dat2', 'children'),Output('drop_value','data'),
+Output('weld_drop', 'children'),Output('mic_drop', 'children'),
+Input('test_dropdown','value'))
 #updates the figures based on the option chosen in the dropdown menu
 def update_value(value):
     print(value)
@@ -420,40 +431,49 @@ def update_value(value):
         ]
     
     left_layout=[
-        html.H1('Data Visualisation of Robotic Welding',style={'margin-top':   '5px','margin-left':  '10px'}),
+        html.H1('Data Visualisation of Robotic Welding',
+        style={'margin-top':   '5px','margin-left':  '10px'}),
         #html.Hr(style={'width': '95%'}),
         dcc.Graph(
         id='graph-vol2',
-        figure=fig_vol,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
+        figure=fig_vol,style={'width': '90%', 'height': '20vh',
+        'text-align': 'center','padding':'1rem'}),
         html.Hr(style={'width': '95%'}),
         dcc.Graph(
         id='graph-cur2',
-        figure=fig_cur,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
+        figure=fig_cur,style={'width': '90%', 'height': '20vh',
+        'text-align': 'center','padding':'1rem'}),
         html.Hr(style={'width': '95%'}),
         dcc.Graph(
         id='graph-gas2',
-        figure=fig_gas,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'}),
+        figure=fig_gas,style={'width': '90%', 'height': '20vh',
+        'text-align': 'center','padding':'1rem'}),
         html.Hr(style={'width': '95%'}),
         dcc.Graph(
         id='graph-wir2',
-        figure=fig_wir,style={'width': '90%', 'height': '20vh','text-align': 'center','padding':'1rem'})]
+        figure=fig_wir,style={'width': '90%', 'height': '20vh',
+        'text-align': 'center','padding':'1rem'})]
 
     right_layout=[html.H3(' Microphone data'),
             dcc.Graph(
                 id='graph-ch12',
-                figure=fig_ch1,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem',}
+                figure=fig_ch1,style={'width': '100%', 'height': '19.9vh',
+                'text-align': 'center','padding':'0rem',}
             ),
             dcc.Graph(
                 id='graph-ch22',
-                figure=fig_ch2,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+                figure=fig_ch2,style={'width': '100%', 'height': '19.9vh',
+                'text-align': 'center','padding':'0rem'}
             ),
             dcc.Graph(
                 id='graph-ch32',
-                figure=fig_ch3,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+                figure=fig_ch3,style={'width': '100%', 'height': '19.9vh',
+                'text-align': 'center','padding':'0rem'}
             ),
             dcc.Graph(
                 id='graph-ch42',
-                figure=fig_ch4,style={'width': '100%', 'height': '19.9vh','text-align': 'center','padding':'0rem'}
+                figure=fig_ch4,style={'width': '100%', 'height': '19.9vh',
+                'text-align': 'center','padding':'0rem'}
             )
         ]
 
@@ -493,25 +513,29 @@ def update_output(date_value):
 
             dcc.Graph(
                 id='graph-wir-con',
-                figure=fig_wir_consumed,style={'width': '100%', 'height': '40vh','text-align': 'center','padding':'1rem',}
+                figure=fig_wir_consumed,style={'width': '100%', 'height': '40vh',
+                'text-align': 'center','padding':'1rem',}
             ),
             html.Hr(style={'width': '95%'}),
             dcc.Graph(
                 id='graph-gas-con',
-                figure=fig_gas_consumed,style={'width': '100%', 'height': '40vh','text-align': 'center','padding':'1rem'}
+                figure=fig_gas_consumed,style={'width': '100%', 'height': '40vh',
+                'text-align': 'center','padding':'1rem'}
             ),
         ]
 
         df_util=openfiles.uptime_graph(int(date_string))
         print(df_util)
-        fig_util=px.line(df_util,x="Time [h]",y="Utilization Rate Daily [%]",title='Daily Utilization Rate')
+        fig_util=px.line(df_util,x="Time [h]",y="Utilization Rate Daily [%]",
+        title='Daily Utilization Rate')
         fig_util.update_layout(
         plot_bgcolor=colors['background'],
         paper_bgcolor=colors['background'],
         font_color=colors['text'],
         margin=dict(l=20, r=20, t=35, b=20)
         )
-        fig_util_fl=px.line(df_util,x="Time [h]",y="Utilization Rate [%]",title='First to Last Test Utilization Rate')
+        fig_util_fl=px.line(df_util,x="Time [h]",y="Utilization Rate [%]",
+        title='First to Last Test Utilization Rate')
         fig_util_fl.update_layout(
         plot_bgcolor=colors['background'],
         paper_bgcolor=colors['background'],
@@ -522,11 +546,13 @@ def update_output(date_value):
         right_layout=[html.H3('Utilization statistics'),
             dcc.Graph(
                 id='graph-ut-d',
-                figure=fig_util,style={'width': '100%', 'height': '35vh','text-align': 'center','padding':'1rem',}
+                figure=fig_util,style={'width': '100%', 'height': '35vh',
+                'text-align': 'center','padding':'1rem',}
             ),
             dcc.Graph(
                 id='graph-ut-fl',
-                figure=fig_util_fl,style={'width': '100%', 'height': '35vh','text-align': 'center','padding':'1rem',}
+                figure=fig_util_fl,style={'width': '100%', 'height': '35vh',
+                'text-align': 'center','padding':'1rem',}
             ),
 
         ]

@@ -26,7 +26,9 @@ dash.register_page(__name__)
 layout=([
 
     dcc.Interval(id='update_dropdown', disabled=False, interval=1*1000, n_intervals=0),
-    html.Div(className="left_menu",id="weld_drop",children=[html.H1('Data Visualisation of Robotic Welding',style={'margin-top':   '5px','margin-left':  '10px'})]),
+    html.Div(className="left_menu",id="weld_drop",
+    children=[html.H1('Data Visualisation of Robotic Welding',
+    style={'margin-top':   '5px','margin-left':  '10px'})]),
     html.Div(className="right_content",
     children=[
             html.Div(
