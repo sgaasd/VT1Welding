@@ -38,3 +38,25 @@ On the KPI page use the calendar to choose which day you would like to see the K
 
 
 ## Data acquisition pipeline
+
+Before conducting your experiment make sure that the [simi-constant-params](https://github.com/sgaasd/VT1Welding/blob/main/Data/meta/00_semi_constant_param.csv) are correct for your testing
+
+Connect ethernet from the PLC to the PC
+
+Make sure that both the webcam an microphone is connected to the pc
+
+Run the robot program first then in root directory run
+```
+main.py
+```
+
+Then through the terminal you will be guided through
+
+
+### Physical dependencies
+
+- [ReSpeaker USB 4 Mic array](https://wiki.seeedstudio.com/ReSpeaker-USB-Mic-Array/)
+
+- 1080p 30fps webcam, does not need to be a specific webcam but the one used was: [C920 HD Pro Webcam](https://www.logitech.com/da-dk/products/webcams/c920-pro-hd-webcam.960-001055.html)
+
+- [Migatronic Cowelder](https://www.migatronic.com/da/)

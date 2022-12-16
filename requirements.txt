@@ -4,6 +4,5 @@ pandas
 scipy
 numpy
 socket
-os
-datetime
 cv2
+sounddevice
