@@ -270,10 +270,18 @@ current,voltage,wirefeed,gas_flow,discribtion,notes):
 
 #function that controls communication with the robot and starts and stops any recordings
 def data_exchange_with_cowelder():
+    
+    
+
     current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=0,0,0,0,0,0,0
     df_last_setting=0
     Hz_sound=16000
     Hz_weld=500
+
+    current,voltage,wirefeed,gas_flow,t_horizontal,t_vertical,discribtion=meta_data(current,voltage,
+                                    wirefeed,gas_flow,t_horizontal,t_vertical,discribtion,df_last_setting)
+    initiate_weld_signal = input("Type 'weld' to start welding: ")
+
     PORT = 50000
     SAMPLERATE = 10
     ur10_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
